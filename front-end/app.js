@@ -15,11 +15,13 @@ app.config(function($routeProvider){
 
 });
 
+
+
 app.controller('mainController', function(){
 
-     console.log("hello")
-
 });
+
+var API = 'some url'
 
 app.controller('loginController', function($scope, $http, $location, $cookies){
      var credentials = {
@@ -36,4 +38,23 @@ app.controller('loginController', function($scope, $http, $location, $cookies){
                $location.path('/options');
           });
      };
+})
+
+app.run(function($rootScope, $location, $cookies) {
+     $rootScope.$on('$locationChangeStart', function(event, nextUrl, currentUrl) {
+          currentUrl = currentUrl.split('#');
+          nextUrl = nextUrl.split('#');
+          token = $cookies.get('Token');
+          if (token === undefined) {
+               if (nextUrl[1] === '/') {
+                    $location.path('/');
+               } else if (nextUrl[1] === '/login') {
+                    $location.path('/login');
+               } else if (nextUrl[1] === '/register') {
+                    $location.path('/signup');
+               } else if (nextUrl[1] === '/options' || '/payment' || '/delivery') {
+                    $location.path('/login');
+               }
+          }
+     })
 })
