@@ -11,11 +11,9 @@ app.config(function($routeProvider){
      .when('/login', {
           templateUrl: 'login.html',
           controller: 'loginController'
-     })
+     });
 
 });
-
-
 
 app.controller('mainController', function(){
 
@@ -38,7 +36,7 @@ app.controller('loginController', function($scope, $http, $location, $cookies){
                $location.path('/options');
           });
      };
-})
+});
 
 app.run(function($rootScope, $location, $cookies) {
      $rootScope.$on('$locationChangeStart', function(event, nextUrl, currentUrl) {
@@ -51,10 +49,10 @@ app.run(function($rootScope, $location, $cookies) {
                } else if (nextUrl[1] === '/login') {
                     $location.path('/login');
                } else if (nextUrl[1] === '/register') {
-                    $location.path('/signup');
+                    $location.path('/register');
                } else if (nextUrl[1] === '/options' || '/payment' || '/delivery') {
                     $location.path('/login');
                }
           }
-     })
-})
+     });
+});
