@@ -18,6 +18,16 @@ app.config(function($routeProvider){
           controller: 'servicesController'
      })
 
+     .when('/quote', {
+          templateUrl: 'quote.html',
+          controller: 'quoteController'
+     })
+
+     .when('/register', {
+          templateUrl: 'register.html',
+          contrller: 'registerController'
+     })
+
 });
 
 app.controller('mainController', function(){
@@ -25,7 +35,7 @@ app.controller('mainController', function(){
 
 });
 
-var API = 'some url';
+var API = 'http://localhost:5000';
 
 app.controller('loginController', function($scope, $http, $location, $cookies) {
      console.log("login.controller")
@@ -52,9 +62,42 @@ app.controller('servicesController', function($scope, $http, $location) {
           $scope.services = data;
      });
 
-     $scope.someService = function(someData) {
-          someData =  $scope
+     $scope.someService = function(number) {
+          console.log(number, 'TVs');
      }
+
+
+})
+
+app.controller('quoteController', function($scope, $http, $location) {
+     $http.get(API + '/quote').success(function(data) {
+          $scope.quote = data
+     })
+
+     $scope.someQuote = function(someQuoteData) {
+          someQuoteData = $scope
+     }
+})
+
+app.controller('registerController', function($scope, $http, $location) {
+     var credentials = {
+          "_id": null,
+          "password": null,
+          "email": null
+     };
+
+     $scope.register = function() {
+          if ($scope.password !== $scope.confirmPassword) {
+               $location.path('/register');
+          } else {
+               credentials._id = $scope.username;
+               credentials.password = $scope.password;
+               credentials.email = $scope.email;
+          }
+          $http.post(API + '/signup', credentials).success(function(data) {
+               $location.path('/login');
+          });
+     };
 })
 
 app.run(function($rootScope, $location, $cookies) {
@@ -73,8 +116,12 @@ app.run(function($rootScope, $location, $cookies) {
                     $location.path('/login');
                } else if (nextUrl[1] === '/register') {
                     $location.path('/register');
+               } else if (nextUrl[1] === '/services') {
+                    $location.path('/services');
+               } else if (nextUrl[1] === '/quote') {
+                    $location.pathe('/quote');
                } else if (
-                    nextUrl[1] === '/services' ||
+                    // nextUrl[1] === '/services' ||
                     nextUrl[1] === '/payment' ||
                     nextUrl[1] === '/delivery') {
                     $location.path('/login');
