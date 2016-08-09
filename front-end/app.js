@@ -18,9 +18,19 @@ app.config(function($routeProvider){
           controller: 'servicesController'
      })
 
-     .when('/services/:tv/:10', {
+     .when('/services/tv/:10', {
           templateUrl: 'tv.html',
           controller: 'tvController'
+     })
+
+     .when('/services/ceiling-fan/:20', {
+          templateUrl: 'ceiling-fan.html',
+          controller: 'ceilingFanController'
+     })
+
+     .when('/services/hole-in-wall/:30', {
+          templateUrl: 'hole-in-wall.html',
+          controller: 'ceilingFanController'
      })
 
      .when('/quote', {
@@ -37,7 +47,6 @@ app.config(function($routeProvider){
 
 app.controller('mainController', function(){
      console.log("main.controller")
-
 });
 
 var API = 'http://localhost:5000';
@@ -70,8 +79,6 @@ app.controller('servicesController', function($scope, $http, $location) {
      $scope.someService = function(number) {
           console.log(number, 'TVs');
      }
-
-
 })
 
 app.controller('quoteController', function($scope, $http, $location) {
@@ -103,7 +110,21 @@ app.controller('registerController', function($scope, $http, $location) {
                $location.path('/login');
           });
      };
-})
+});
+
+app.controller('tvController', function($scope, $http, $location) {
+
+
+     $scope.quote = function() {
+          // $http.post(API + '/quote', )
+          console.log($scope.time)
+          console.log($scope.date)
+          console.log($scope.gt32)
+          console.log($scope.brackets)
+          console.log($scope.wall)
+
+     }
+});
 
 app.run(function($rootScope, $location, $cookies) {
      $rootScope.$on('$locationChangeStart', function(event, nextUrl, currentUrl) {
@@ -112,7 +133,7 @@ app.run(function($rootScope, $location, $cookies) {
           nextUrl = nextUrl.split('#');
           token = $cookies.get('Token');
 
-          console.log("token:" + token, "currentUrl:" + currentUrl, "nextUrl:" + nextUrl)
+          // console.log("token:" + token, "currentUrl:" + currentUrl, "nextUrl:" + nextUrl)
 
           if (token === undefined) {
                if (nextUrl[1] === '/') {
@@ -124,7 +145,7 @@ app.run(function($rootScope, $location, $cookies) {
                } else if (nextUrl[1] === '/services') {
                     $location.path('/services');
                } else if (nextUrl[1] === '/quote') {
-                    $location.pathe('/quote');
+                    $location.path('/quote');
                } else if (
                     // nextUrl[1] === '/services' ||
                     nextUrl[1] === '/payment' ||
