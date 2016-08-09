@@ -1,0 +1,15 @@
+{
+  "name": "auturgus_handyman_app",
+  "version": "1.0.0",
+  "description": "\"Uber for handymen\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "auturgus-handyman-app"
+  },
+  "author": "Allen H. Thompson",
+  "license": "ISC"
+}

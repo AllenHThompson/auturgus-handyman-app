@@ -18,6 +18,11 @@ app.config(function($routeProvider){
           controller: 'servicesController'
      })
 
+     .when('/services/:tv/:10', {
+          templateUrl: 'tv.html',
+          controller: 'tvController'
+     })
+
      .when('/quote', {
           templateUrl: 'quote.html',
           controller: 'quoteController'
