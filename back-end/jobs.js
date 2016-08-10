@@ -1,21 +1,8 @@
-var mongoose = require('mongoose');
-
 /* database setup */
 
-var Requester = mongoose.model('Requester', {
+var Requester = mongoose.model('Jobs', {
   _id:                   { type: String, required: true},
-  encryptedPassword:     { type: String, required: true},
   email:                 { type: String, required: true},
-  
-
-
-  authenticationTokens:
-  [
-    {
-      token:    {type: String, required: true},
-      expires:  {type: String, required: true}
-    }
-  ],
 
   bookings:
   [
@@ -39,4 +26,4 @@ var Requester = mongoose.model('Requester', {
   ]
 });
 
-module.exports = Requester;
+module.exports = Jobs;

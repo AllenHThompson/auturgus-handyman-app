@@ -27,7 +27,7 @@ var serviceOptions = [
      "Mount 3 TVs"
 ];
 
-var myNewUser;
+var myNewRequester;
 
 /* Routes */
 app.get('/services', function(request, response) {
@@ -52,11 +52,11 @@ app.post('/signup', function(request, response) {
                          return;
                     }
                     console.log('the encrypted password is [' + hash + '].');
-                    myNewUser = new Requester({
+                    myNewRequester = new Requester({
                          _id: credentials._id, encryptedPassword: hash,
                          email: credentials.email
                     });
-                    myNewUser.save(function(err) {
+                    myNewRequester.save(function(err) {
                          if (err) {
                               console.log('there was an error creating the new user in the database');
                               console.error(err.message);

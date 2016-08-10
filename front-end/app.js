@@ -18,7 +18,7 @@ app.config(function($routeProvider){
           controller: 'servicesController'
      })
 
-     .when('/services/tv/:10', {
+     .when('/services/tv/:quantity', {
           templateUrl: 'tv.html',
           controller: 'tvController'
      })
@@ -49,7 +49,7 @@ app.controller('mainController', function(){
      console.log("main.controller")
 });
 
-var API = 'http://localhost:5000';
+var API = 'http://localhost:8000';
 
 app.controller('loginController', function($scope, $http, $location, $cookies) {
      console.log("login.controller")
@@ -68,6 +68,8 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
                $cookies.put('Token', data.token);
                $location.path('/services');
           });
+
+          console.log(credentials)
      };
 });
 
@@ -99,12 +101,14 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 
      $scope.register = function() {
+          console.log("register")
           if ($scope.password !== $scope.confirmPassword) {
                $location.path('/register');
           } else {
                credentials._id = $scope.username;
                credentials.password = $scope.password;
                credentials.email = $scope.email;
+               // console.log(credentials)
           }
           $http.post(API + '/signup', credentials).success(function(data) {
                $location.path('/login');
@@ -112,17 +116,36 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 });
 
-app.controller('tvController', function($scope, $http, $location) {
+app.controller('tvController', function($scope, $http, $location, $routeParams) {
 
 
      $scope.quote = function() {
+
+          //DO I EVEN NEED TO POST THIS TO THE DATABASE
           // $http.post(API + '/quote', )
+          // $routeParams.quantity
+          // Number($routeParams.quantity)
+
+          var total = 0;
+          var numHours = 0;
+          total = numHours * 50;
+
+          // if ($scope.brackets === 'false') {
+          //      total = total + 100;
+          // } else if ($scope.gt32 === 'true') {
+          //      total += numHours * 10;
+          // } else if ($scope.wall === 'panel' || 'brick' || 'concrete') {
+          //      toal += numHours * 10;
+          // }
+
+
           console.log($scope.time)
           console.log($scope.date)
           console.log($scope.gt32)
           console.log($scope.brackets)
           console.log($scope.wall)
 
+          $location.path('/quote')
      }
 });
 
@@ -146,10 +169,7 @@ app.run(function($rootScope, $location, $cookies) {
                     $location.path('/services');
                } else if (nextUrl[1] === '/quote') {
                     $location.path('/quote');
-               } else if (
-                    // nextUrl[1] === '/services' ||
-                    nextUrl[1] === '/payment' ||
-                    nextUrl[1] === '/delivery') {
+               } else if (nextUrl[1] === '/payment') {
                     $location.path('/login');
                }
           }
