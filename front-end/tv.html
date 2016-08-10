@@ -7,7 +7,7 @@
 </div>
 
 <div class="form-group">
-     <label for="sel1">Do you have a mounting bracket?</label>
+     <label for="sel2">Do you have a mounting bracket?</label>
      <select class="form-control" id="sel2" ng-model="brackets">
           <option>yes</option>
           <option>no</option>
@@ -15,7 +15,7 @@
 </div>
 
 <div class="form-group">
-     <label for="sel1">Larger than 32?"</label>
+     <label for="sel3">Larger than 32?"</label>
      <select class="form-control" id="sel3" ng-model="gt32">
           <option>yes</option>
           <option>no</option>
@@ -23,7 +23,7 @@
      </select>
 </div>
 
-<div class="form-group">
+<!-- <div class="form-group">
   <label for="date">Date:</label>
   <input type="date" class="form-control" id="date" ng-model="date">
 </div>
@@ -31,11 +31,24 @@
 <div class="form-group">
   <label for="time">Time:</label>
   <input type="time" class="form-control" id="time" ng-model="time">
+</div> -->
+
+<div class="form-group">
+     <label for="sel4">Estimated number of hours?</label>
+     <select class="form-control" id="sel4" ng-model="numHours">
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+     </select>
 </div>
 
 <div class="form-group">
      <label for="comment">Describe your project:</label>
      <textarea class="form-control" rows="5" id="comment"></textarea>
 </div>
+
+
+
 
 <input type="submit" name="submit" class="btn btn-info" value="Quote" ng-click="quote()">

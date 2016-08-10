@@ -116,7 +116,7 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 });
 
-app.controller('tvController', function($scope, $http, $location, $routeParams) {
+app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams) {
 
 
      $scope.quote = function() {
@@ -127,25 +127,33 @@ app.controller('tvController', function($scope, $http, $location, $routeParams) 
           // Number($routeParams.quantity)
 
           var total = 0;
-          var numHours = 0;
+          var numHours = Number($scope.numHours);
           total = numHours * 50;
 
-          // if ($scope.brackets === 'false') {
-          //      total = total + 100;
-          // } else if ($scope.gt32 === 'true') {
-          //      total += numHours * 10;
-          // } else if ($scope.wall === 'panel' || 'brick' || 'concrete') {
-          //      toal += numHours * 10;
-          // }
+          if ($scope.brackets === 'no') {
+               total = total + 100;
+          }
+          if ($scope.gt32 === 'yes') {
+               total = total + (numHours * 10);
+          }
+          if ($scope.wall === 'yes') {
+               total = total + (numHours * 10);
+          }
 
 
-          console.log($scope.time)
-          console.log($scope.date)
-          console.log($scope.gt32)
-          console.log($scope.brackets)
-          console.log($scope.wall)
+
+          $rootScope.tvOptions = {
+               wall: $scope.wall,
+               brackets: $scope.brackets,
+               gt32: $scope.gt32,
+               total: total
+          };
+
+          
 
           $location.path('/quote')
+
+
      }
 });
 
