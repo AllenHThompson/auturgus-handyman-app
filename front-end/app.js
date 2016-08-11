@@ -55,18 +55,29 @@ app.config(function($routeProvider){
      .when('/payment', {
           templateUrl: 'payment.html',
           controller: 'paymentController'
-     })
+     });
 
+});
+app.factory('serviceOptions', function() {
+     var factory = {};
+     var options = {};
+     factory.getOptions = function(){
+          return this.options;
+     };
+     factory.setOptions = function(serviceOptions){
+          this.options = serviceOptions;
+     };
+     return factory;
 });
 
 app.controller('mainController', function(){
-     console.log("main.controller")
+     console.log("main.controller");
 });
 
 var API = 'http://localhost:8000';
 
 app.controller('loginController', function($scope, $http, $location, $cookies) {
-     console.log("login.controller")
+     console.log("login.controller");
 
      var credentials = {
           "_id": null,
@@ -83,7 +94,7 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
                $location.path('/services');
           });
 
-          console.log(credentials)
+          console.log(credentials);
      };
 });
 
@@ -95,31 +106,28 @@ app.controller('servicesController', function($scope, $http, $location) {
      // $scope.someService = function(number) {
      //      console.log(number, 'TVs');
      // }
-})
+});
 
-app.controller('quoteController', function($scope, $http, $location) {
+app.controller('quoteController', function($scope, $http, $location, serviceOptions) {
      // $http.get(API + '/quote').success(function(data) {
      //      $scope.quote = data
      // })
 
+     $scope.options = serviceOptions.getOptions();
+
      $scope.someQuote = function(someQuoteData) {
-          someQuoteData = $scope
-     }
+          someQuoteData = $scope;
+     };
      /*--------------------------------------------------------------------- */
-     // $rootScope.tvOptions = {
-     //      wall: $scope.wall,
-     //      brackets: $scope.brackets,
-     //      gt32: $scope.gt32,
-     //      total: $scope.total
-     // };
+
 
      $scope.book = function() {
           // console.log("login controller")
           // credentials._id = $scope.username;
           // credentials.password = $scope.password;
-          console.log("you clicked")
+          console.log("you clicked");
           var test = "string";
-          $location.path('/payment')
+          $location.path('/payment');
           // $http.post(API + '/book', test).success(function(data) {
           //      // $cookies.put('Token', data.token);
           //      $location.path('/services');
@@ -134,7 +142,9 @@ app.controller('quoteController', function($scope, $http, $location) {
                     $location.path('/');
                };
      /* ------------------------------------------------------------*/
-})
+});
+
+
 
 app.controller('registerController', function($scope, $http, $location) {
      var credentials = {
@@ -144,7 +154,7 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 
      $scope.register = function() {
-          console.log("register")
+          console.log("register");
           if ($scope.password !== $scope.confirmPassword) {
                $location.path('/register');
           } else {
@@ -159,15 +169,13 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 });
 
-app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams) {
+app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
      $scope.quote = function() {
 
           var total = 0;
           var numHours = Number($scope.numHours);
           total = numHours * 50;
-          // if (numHours = '') {
-          //
-          // }
+          
           if ($scope.brackets === 'no') {
                total = total + 100;
           }
@@ -178,7 +186,8 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                total = total + (numHours * 10);
           }
 
-          $rootScope.tvOptions = {
+          var tvOptions =  {
+               service: "TV",
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
@@ -187,6 +196,10 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                description: $scope.description,
                total: total
           };
+
+          serviceOptions.setOptions(tvOptions);
+
+
           $location.path('/quote/tv');
 
      };
