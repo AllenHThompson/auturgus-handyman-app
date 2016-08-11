@@ -108,21 +108,18 @@ app.controller('servicesController', function($scope, $http, $location) {
      // }
 });
 
-app.controller('quoteController', function($scope, $http, $location) {
+app.controller('quoteController', function($scope, $http, $location, serviceOptions) {
      // $http.get(API + '/quote').success(function(data) {
      //      $scope.quote = data
      // })
+
+     $scope.options = serviceOptions.getOptions();
 
      $scope.someQuote = function(someQuoteData) {
           someQuoteData = $scope;
      };
      /*--------------------------------------------------------------------- */
-     // $rootScope.tvOptions = {
-     //      wall: $scope.wall,
-     //      brackets: $scope.brackets,
-     //      gt32: $scope.gt32,
-     //      total: $scope.total
-     // };
+
 
      $scope.book = function() {
           // console.log("login controller")
@@ -178,9 +175,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           var total = 0;
           var numHours = Number($scope.numHours);
           total = numHours * 50;
-          // if (numHours = '') {
-          //
-          // }
+          
           if ($scope.brackets === 'no') {
                total = total + 100;
           }
@@ -192,6 +187,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           }
 
           var tvOptions =  {
+               service: "TV",
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
@@ -202,10 +198,6 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           };
 
           serviceOptions.setOptions(tvOptions);
-
-          
-
-
 
 
           $location.path('/quote/tv');
