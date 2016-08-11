@@ -1,29 +1,29 @@
 <div>
      <table style="width:50%" ng-model="order">
 
-          <tr>
+          <!-- <tr>
                <td>Job</td>
-               <td>Service</td>
-          </tr>
+               <td>{{THE JOB}}</td>
+          </tr> -->
 
           <tr>
                <td>Time</td>
-               <td>{{serviceOptions.time}}</td>
+               <td>{{tvOptions.time}}</td>
           </tr>
           <tr>
                <td>Date</td>
-               <td>{{serviceOptions.date}}</td>
+               <td>{{tvOptions.date}}</td>
           </tr>
 
 
           <tr>
                <td>Description</td>
-               <td>{{serviceOptions.description}}</td>
+               <td>{{tvOptions.description}}</td>
           </tr>
 
           <tr>
                <td>Total</td>
-               <td>{{serviceOptions.total}}</td>
+               <td>{{tvOptions.total}}</td>
           </tr>
      </table>
      <br>
@@ -40,4 +40,3 @@
 
 
 <input type="submit" name="submit" class="btn btn-info" value="Book" ng-click="book()">
-<input type="submit" name="submit" class="btn btn-info" value="Cancel" ng-click="cancel()">

@@ -1,25 +1,24 @@
 <div class="col-md-8"><a href="#/"><img src="images/dc-roasters.png" alt="" /></a></div>
 
 <div>
-     <table style="width:100%" ng-model="order">
+     <table style="width:50%" ng-model="order">
           <tr class="tableHeader">
-               <th colspan="2">Choices</th>
+               <th colspan="2">Your Job</th>
           </tr>
           <tr>
-               <td>Grind</td>
-               <td>{{order.options.grind}}</td>
+               <td>Job</td>
+               <td>TV Install</td>
           </tr>
           <tr>
-               <td>Frequency of Delivery</td>
-               <td>Monthly</td>
+               <td>Date</td>
+               <td>{{tvOptions.date}}</td>
           </tr>
+
           <tr>
-               <td>Coffee in Pounds</td>
-               <td>{{order.options.quantity}}</td>
+               <td>Time</td>
+               <td>{{tvOptions.time}}</td>
           </tr>
-          <tr>
-               <th colspan="2">Delivery Information</th>
-          </tr>
+
           <tr>
                <td>Full Name</td>
                <td>{{order.address.name}}</td>
@@ -44,27 +43,17 @@
                <td>Zip Code</td>
                <td>{{order.address.zipCode}}</td>
           </tr>
-          <tr>
-               <td>Delivery Date</td>
-               <td>{{order.address.deliveryDate}}</td>
-          </tr>
-          <tr>
-               <th colspan="2">Current Charge</th>
-          </tr>
-          <tr>
-               <td>Quantity</td>
-               <td>{{order.options.quantity}}</td>
-          </tr>
-          <tr>
-               <td>Shipping</td>
-               <td>Free!</td>
-          </tr>
+
+
+
+
           <tr>
                <td>Total</td>
-               <td>{{order.total}}</td>
+               <td>{{tvOptions.total}}</td>
           </tr>
      </table>
      <br>
-     <input ng-click="pay()" type="submit" name="submit" value="Pay With Credit Card">
-     <input ng-click="cancel()" type="submit" name="submit" value="Cancel">
+     <input type="submit" name="submit" class="btn btn-info" value="Pay With Card" ng-click="pay()">
+     <input type="submit" name="submit" class="btn btn-info" value="Cancel" ng-click="cancel()">
+
 </div>

@@ -22,6 +22,10 @@ app.config(function($routeProvider){
           templateUrl: 'tv.html',
           controller: 'tvController'
      })
+     // .when('/services/tv/:quantity', {
+     //      templateUrl: 'quote.html',
+     //      controller: 'serviceController'
+     // })
 
      .when('/services/ceiling-fan/:20', {
           templateUrl: 'ceiling-fan.html',
@@ -33,7 +37,12 @@ app.config(function($routeProvider){
           controller: 'ceilingFanController'
      })
 
-     .when('/quote', {
+     .when('/quote-tv', {
+          templateUrl: 'quote-tv.html',
+          controller: 'quoteController'
+     })
+
+     .when('/quote/:service', {
           templateUrl: 'quote.html',
           controller: 'quoteController'
      })
@@ -42,7 +51,7 @@ app.config(function($routeProvider){
           templateUrl: 'register.html',
           contrller: 'registerController'
      })
-     
+
      .when('/payment', {
           templateUrl: 'payment.html',
           controller: 'paymentController'
@@ -96,7 +105,7 @@ app.controller('quoteController', function($scope, $http, $location) {
      $scope.someQuote = function(someQuoteData) {
           someQuoteData = $scope
      }
-/*--------------------------------------------------------------------- */
+     /*--------------------------------------------------------------------- */
      // $rootScope.tvOptions = {
      //      wall: $scope.wall,
      //      brackets: $scope.brackets,
@@ -110,14 +119,21 @@ app.controller('quoteController', function($scope, $http, $location) {
           // credentials.password = $scope.password;
           console.log("you clicked")
           var test = "string";
+          $location.path('/payment')
           // $http.post(API + '/book', test).success(function(data) {
           //      // $cookies.put('Token', data.token);
           //      $location.path('/services');
           // });
 
           // console.log(tvOptions)
+
      };
-/*--------------------------------------------------------------------- */
+
+     /* ------------------------------------------------------------*/
+               $scope.cancel = function() {
+                    $location.path('/');
+               };
+     /* ------------------------------------------------------------*/
 })
 
 app.controller('registerController', function($scope, $http, $location) {
@@ -146,15 +162,12 @@ app.controller('registerController', function($scope, $http, $location) {
 app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams) {
      $scope.quote = function() {
 
-          //DO I EVEN NEED TO POST THIS TO THE DATABASE
-          // $http.post(API + '/quote', )
-          // $routeParams.quantity
-          // Number($routeParams.quantity)
-
           var total = 0;
           var numHours = Number($scope.numHours);
           total = numHours * 50;
-
+          // if (numHours = '') {
+          //
+          // }
           if ($scope.brackets === 'no') {
                total = total + 100;
           }
@@ -164,14 +177,77 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           if ($scope.wall === 'yes') {
                total = total + (numHours * 10);
           }
+
           $rootScope.tvOptions = {
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
+               date: $scope.date,
+               time: $scope.time,
+               description: $scope.description,
                total: total
           };
-          $location.path('/quote')
-     }
+          $location.path('/quote/tv');
+
+     };
+});
+
+app.controller('serviceController', function($rootScope, $scope, $http, $location, $routeParams) {
+     $scope.quote = function() {
+
+          var total = 0;
+          var numHours = Number($scope.numHours);
+          total = numHours * 50;
+          // if (numHours = '') {
+          //
+          // }
+          if ($scope.brackets === 'no') {
+               total = total + 100;
+          }
+          if ($scope.gt32 === 'yes') {
+               total = total + (numHours * 10);
+          }
+          if ($scope.wall === 'yes') {
+               total = total + (numHours * 10);
+          }
+
+          $rootScope.serviceOptions = {
+               wall: $scope.wall,
+               brackets: $scope.brackets,
+               gt32: $scope.gt32,
+               date: $scope.date,
+               time: $scope.time,
+               description: $scope.description,
+               total: total
+          };
+          $location.path('/quote/:service');
+
+     };
+});
+
+app.controller('paymentController', function($rootScope, $scope, $http, $location, $cookies, $routeParams) {
+     // $scope.pay = function() {
+     //   $location.path('/thankyou');
+     //   $http.post(API + '/orders', {
+     //     token: $cookies.get('Token'),
+     //     order: order
+     //   });
+     // };
+     // $rootScope.tvOptions = {
+     //      wall: $scope.wall,
+     //      brackets: $scope.brackets,
+     //      gt32: $scope.gt32,
+     //      date: $scope.date,
+     //      time: $scope.time,
+     //      description: $scope.description
+     //
+     // };
+     // $rootScope.tvOptions.moreStuff = 43;
+
+     $scope.cancel = function() {
+          $location.path('/');
+     };
+     // $scope.order = order;
 });
 
 app.run(function($rootScope, $location, $cookies) {
@@ -195,7 +271,7 @@ app.run(function($rootScope, $location, $cookies) {
                } else if (nextUrl[1] === '/quote') {
                     $location.path('/quote');
                } else if (nextUrl[1] === '/payment') {
-                    $location.path('/login');
+                    $location.path('/payment');
                }
           }
           if (token !== undefined) {
