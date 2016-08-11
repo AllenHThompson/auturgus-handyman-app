@@ -172,6 +172,57 @@ app.post('/login', function(request, response) {
 
 });
 
+
+
+app.post('/book', function(request, response) {
+     console.log("you clicked");
+     var credentials = request.body;
+     console.log(credentials);
+     Requester.findOne({_id: credentials._id}, function(err, res) {
+          if (err) {
+               console.error(err.message);
+               return;
+          }
+          if (res === null) {
+               console.log('the requested user [' + credentials._id + '] was not located in the database. this is a new user');
+
+               bcrypt.hash(credentials.password, saltRounds, function(err, hash) {
+                    if (err) {
+                         console.log('an error occurred hashing the password');
+                         console.error(err.message);
+                         return;
+                    }
+                    console.log('the encrypted password is [' + hash + '].');
+                    myNewRequester = new Requester({
+                         _id: credentials._id, encryptedPassword: hash,
+                         email: credentials.email
+                    });
+                    myNewRequester.save(function(err) {
+                         if (err) {
+                              console.log('there was an error creating the new user in the database');
+                              console.error(err.message);
+                              console.log(err.errors);
+                              return;
+                         }
+                         console.log('the user was created successfully in the database');
+                         response.json({status: 'ok'});
+                    });
+               });
+          } else if (credentials._id === res._id) {
+               console.log('the requested username [' + credentials._id + '] already exists');
+               console.log('***** CONFIRM THAT WE ARE RETURNING TEH CORRECT ERROR CODES*****');
+               response.status(409);
+               response.json({
+                    "status": "fail",
+                    "message": "username already taken"
+               });
+               return;
+          } else {
+               console.log('there is some other error. need to return some kind of error code');
+          }
+     });
+});
+
 app.listen(8000, function(){
      console.log('listening on port 8000');
 });

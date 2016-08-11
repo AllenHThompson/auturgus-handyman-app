@@ -42,6 +42,11 @@ app.config(function($routeProvider){
           templateUrl: 'register.html',
           contrller: 'registerController'
      })
+     
+     .when('/payment', {
+          templateUrl: 'payment.html',
+          controller: 'paymentController'
+     })
 
 });
 
@@ -74,23 +79,45 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
 });
 
 app.controller('servicesController', function($scope, $http, $location) {
-     $http.get(API + '/services').success(function(data) {
-          $scope.services = data;
-     });
+     // $http.get(API + '/services').success(function(data) {
+     //      $scope.services = data;
+     // });
 
-     $scope.someService = function(number) {
-          console.log(number, 'TVs');
-     }
+     // $scope.someService = function(number) {
+     //      console.log(number, 'TVs');
+     // }
 })
 
 app.controller('quoteController', function($scope, $http, $location) {
-     $http.get(API + '/quote').success(function(data) {
-          $scope.quote = data
-     })
+     // $http.get(API + '/quote').success(function(data) {
+     //      $scope.quote = data
+     // })
 
      $scope.someQuote = function(someQuoteData) {
           someQuoteData = $scope
      }
+/*--------------------------------------------------------------------- */
+     // $rootScope.tvOptions = {
+     //      wall: $scope.wall,
+     //      brackets: $scope.brackets,
+     //      gt32: $scope.gt32,
+     //      total: $scope.total
+     // };
+
+     $scope.book = function() {
+          // console.log("login controller")
+          // credentials._id = $scope.username;
+          // credentials.password = $scope.password;
+          console.log("you clicked")
+          var test = "string";
+          // $http.post(API + '/book', test).success(function(data) {
+          //      // $cookies.put('Token', data.token);
+          //      $location.path('/services');
+          // });
+
+          // console.log(tvOptions)
+     };
+/*--------------------------------------------------------------------- */
 })
 
 app.controller('registerController', function($scope, $http, $location) {
@@ -117,8 +144,6 @@ app.controller('registerController', function($scope, $http, $location) {
 });
 
 app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams) {
-
-
      $scope.quote = function() {
 
           //DO I EVEN NEED TO POST THIS TO THE DATABASE
@@ -139,21 +164,13 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           if ($scope.wall === 'yes') {
                total = total + (numHours * 10);
           }
-
-
-
           $rootScope.tvOptions = {
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
                total: total
           };
-
-          
-
           $location.path('/quote')
-
-
      }
 });
 

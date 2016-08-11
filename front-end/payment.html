@@ -1,0 +1,70 @@
+<div class="col-md-8"><a href="#/"><img src="images/dc-roasters.png" alt="" /></a></div>
+
+<div>
+     <table style="width:100%" ng-model="order">
+          <tr class="tableHeader">
+               <th colspan="2">Choices</th>
+          </tr>
+          <tr>
+               <td>Grind</td>
+               <td>{{order.options.grind}}</td>
+          </tr>
+          <tr>
+               <td>Frequency of Delivery</td>
+               <td>Monthly</td>
+          </tr>
+          <tr>
+               <td>Coffee in Pounds</td>
+               <td>{{order.options.quantity}}</td>
+          </tr>
+          <tr>
+               <th colspan="2">Delivery Information</th>
+          </tr>
+          <tr>
+               <td>Full Name</td>
+               <td>{{order.address.name}}</td>
+          </tr>
+          <tr>
+               <td>Address</td>
+               <td>{{order.address.address}}</td>
+          </tr>
+          <tr>
+               <td>Address 2</td>
+               <td>{{order.address.address2}}</td>
+          </tr>
+          <tr>
+               <td>City</td>
+               <td>{{order.address.city}}</td>
+          </tr>
+          <tr>
+               <td>State</td>
+               <td>{{order.address.state}}</td>
+          </tr>
+          <tr>
+               <td>Zip Code</td>
+               <td>{{order.address.zipCode}}</td>
+          </tr>
+          <tr>
+               <td>Delivery Date</td>
+               <td>{{order.address.deliveryDate}}</td>
+          </tr>
+          <tr>
+               <th colspan="2">Current Charge</th>
+          </tr>
+          <tr>
+               <td>Quantity</td>
+               <td>{{order.options.quantity}}</td>
+          </tr>
+          <tr>
+               <td>Shipping</td>
+               <td>Free!</td>
+          </tr>
+          <tr>
+               <td>Total</td>
+               <td>{{order.total}}</td>
+          </tr>
+     </table>
+     <br>
+     <input ng-click="pay()" type="submit" name="submit" value="Pay With Credit Card">
+     <input ng-click="cancel()" type="submit" name="submit" value="Cancel">
+</div>
