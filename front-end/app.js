@@ -58,6 +58,20 @@ app.config(function($routeProvider){
      })
 
 });
+app.factory('serviceOptions', function() {
+     var factory = {};
+     var options = {};
+     factory.getOptions = function(){
+          return this.options;
+     }
+     factory.setOptions = function(serviceOptions){
+          this.options = serviceOptions
+     }
+     return factory
+
+});
+
+
 
 app.controller('mainController', function(){
      console.log("main.controller")
@@ -136,6 +150,8 @@ app.controller('quoteController', function($scope, $http, $location) {
      /* ------------------------------------------------------------*/
 })
 
+
+
 app.controller('registerController', function($scope, $http, $location) {
      var credentials = {
           "_id": null,
@@ -178,7 +194,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                total = total + (numHours * 10);
           }
 
-          $rootScope.tvOptions = {
+          var tvOptions =  {
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
@@ -187,6 +203,16 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                description: $scope.description,
                total: total
           };
+
+          // $rootScope.tvOptions = {
+          //      wall: $scope.wall,
+          //      brackets: $scope.brackets,
+          //      gt32: $scope.gt32,
+          //      date: $scope.date,
+          //      time: $scope.time,
+          //      description: $scope.description,
+          //      total: total
+          // };
           $location.path('/quote/tv');
 
      };
