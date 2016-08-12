@@ -1,6 +1,7 @@
+var mongoose = require('mongoose');
 /* database setup */
 
-var Jobs = mongoose.model('Jobs', {
+var Jobs = mongoose.model('jobs', {
      status: {type: Boolean, required: true},
      orders: [{
           wall: {type: String},
@@ -21,9 +22,9 @@ var Jobs = mongoose.model('Jobs', {
      }],
      total: {type: Number, required: true},
      description: {type: String},
-     providerId: {type: ObjectId},
+     providerId: {type: String},
      providerName: {type: String},
-     requesterId: {type: ObjectId, required: true},
+     requesterId: {type: String, required: true},
      requesterName: {type: String, required: true}
 });
 

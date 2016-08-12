@@ -97,6 +97,33 @@ var jobs = {
      "requesterName": {type: String, required: true}
 };
 
+// {
+//                     "status": false,
+//                     "orders": [{
+//                          "wall": null,
+//                          "brackets": null,
+//                          "gt32": true,
+//                          "numHoles": 1,
+//                          "sizeHole": "orange",
+//                          "typeWall": "plaster",
+//                          "numFans": 2,
+//                          "installType": null,
+//                          "haveFan": null,
+//                          "needLadder": false,
+//                          "numHours": 2,
+//                          "date": null,
+//                          "time": null,
+//                          "total": 100,
+//                          "description": "need tv on ceiling"
+//                     }],
+//                     "total": 100,
+//                     "description": "need tv on ceiling",
+//                     "providerId": null,
+//                     "providerName": null,
+//                     "requesterId": 2,
+//                     "requesterName": "Will"
+//                }
+
 app.factory('serviceOptions', function() {
      var factory = {};
      var options = {};
@@ -341,7 +368,7 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
 
           // $scope.options
 
-          $http.post(API + '/payment', $scope.options).success(function(data) {
+          $http.post(API + '/postOrder', $scope.options).success(function(data) {
 
                console.log("made api call")
                // $cookies.put('Token', data.token);

@@ -1,12 +1,14 @@
 var express = require('express');
 var app = express();
 var Requester = require('./requester');
+var Jobs = require('./jobs');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var bcrypt = require('my-bcrypt');
 var randomtoken = require('rand-token');
 var cors = require('cors');
 
+mongoose.set('debug', true);
 
 var API_STRIPE_TEST_SECRET_KEY = "sk_test_tTmnADuLXcyI0U2xIpdghVzw";
 var API_STRIPE_TEST_PUBLISH_KEY = "pk_test_etAw7vNMpUggsCRpMvZTY8Gw";
@@ -74,33 +76,61 @@ app.get('/services', function(request, response) {
 
 app.post('/postOrder', function(request, response) {
 
-     var options = request.body;
+     var orders = request.body;
 
-     response.json(serviceOptions);
+     Jobs.findById(orders.id, function(err, res) {
 
-     Jobs.create(
-          credentials._id,
-          { $push:
-               {
-                    authenticationTokens:
-                    {
-                         "token" : token,
-                         "expires" : expirationDate
-                    }
-               }
-          },
-          function(err, reply) {
-               if (err) {
-                    console.error(err.message);
-                    return;
-               }
-               console.log('Updated succeeded', reply);
+          if (err) {
+               console.log("error");
+               response.json({
+                    status: "failed",
+                    err: err
+               })
+               return;
           }
-     );
-
-     Jobs.findOne({objectId: objectId}, function(err, res) {
+          if (res === null) {
+               Jobs.create({
+                    status: orders.status,
+                    orders: [{
+                         wall: orders.wall,
+                         brackets: orders.brackets,
+                         gt32: orders.gt32,
+                         numHoles: orders.numHoles,
+                         sizeHole: orders.sizeHole,
+                         typeWall: orders.typeWall,
+                         numFans: orders.numFans,
+                         installType: orders.installType,
+                         haveFan: orders.haveFan,
+                         needLadder: orders.needLadder,
+                         numHours: orders.numHours,
+                         date: orders.date,
+                         time: orders.time,
+                         total: orders.total,
+                         description: orders.description
+                    }],
+                    total: orders.total,
+                    description: orders.description,
+                    providerId: orders.providerId,
+                    providerName: orders.providerName,
+                    requesterId: orders.requesterId,
+                    requesterName: orders.requesterName
+               }).then(function(){
+                    response.json({
+                         status: "ok",
+                    });
+               });
+}
+          // if (res === null) {
+          //      response.json({
+          //           status: "ok",
+          //           data: data
+          //      }), Jobs.create({data: data})
+          // }
+          // We know there is no object like this one in the db
+          // Create a new order
 
      });
+
 });
 
 
