@@ -7,13 +7,27 @@
           <script src="dependencies/angular-route.js"></script>
           <script src="dependencies/angular-cookies.js"></script>
           <script src="dependencies/jquery.js"></script>
+
+          <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+          <script src="https://checkout.stripe.com/checkout.js"></script>
+          <!-- <script type="text/javascript">
+            Stripe.setPublishableKey('pk_test_etAw7vNMpUggsCRpMvZTY8Gw');
+            var handler = StripeCheckout.configure({
+                 key: 'pk_test_etAw7vNMpUggsCRpMvZTY8Gw',
+                 image: "/img/documentation/checkout/marketplace.png",
+                 locale: 'auto',
+                 token: function(token) {
+
+                 }
+            });
+          </script> -->
+
           <script src="app.js"></script>
           <link rel="stylesheet" href="css/bootstrap.css">
           <link rel="stylesheet" href="css/style.css">
           <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
      </head>
      <body>
-          
 
           <ng-view></ng-view>
 

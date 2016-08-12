@@ -22,10 +22,6 @@ app.config(function($routeProvider){
           templateUrl: 'tv.html',
           controller: 'tvController'
      })
-     // .when('/services/tv/:quantity', {
-     //      templateUrl: 'quote.html',
-     //      controller: 'serviceController'
-     // })
 
      .when('/services/ceiling-fan/:20', {
           templateUrl: 'ceiling-fan.html',
@@ -34,12 +30,7 @@ app.config(function($routeProvider){
 
      .when('/services/hole-in-wall/:30', {
           templateUrl: 'hole-in-wall.html',
-          controller: 'ceilingFanController'
-     })
-
-     .when('/quote-tv', {
-          templateUrl: 'quote-tv.html',
-          controller: 'quoteController'
+          controller: 'holeInWallController'
      })
 
      .when('/quote/:service', {
@@ -55,23 +46,89 @@ app.config(function($routeProvider){
      .when('/payment', {
           templateUrl: 'payment.html',
           controller: 'paymentController'
+     })
+     .when('/thankyou', {
+          templateUrl: 'thankyou.html',
+          controller: 'thankyouController'
      });
-
 });
+
+// var order = {
+//   options: {
+//     "grind": null,
+//     "quantity": null
+//   },
+//   address: {
+//     "name": null,
+//     "address": null,
+//     "address2": null,
+//     "city": null,
+//     "state": null,
+//     "zipCode": null,
+//     "deliveryDate": null
+//   },
+//   total: null
+// };
+
+var jobs = {
+     status: {type: Boolean, required: true},
+     orders: [{
+          "wall": {type: String},
+          "brackets": {type: String},
+          "gt32": {type: String},
+          "numHoles": {type: String},
+          "sizeHole": {type: String},
+          "typeWall": {type: String},
+          "numFans": {type: String},
+          "installType": {type: String},
+          "haveFan": {type: String},
+          "needLadder": {type: String},
+          "numHours": {type: Number},
+          "date": {type: String},
+          "time": {type: String},
+          "total": {type: String, required: true},
+          "description": {type: String}
+     }],
+     "total": {type: Number, required: true},
+     "description": {type: String},
+     "providerId": {type: Number}, //change type from ObjectId
+     "providerName": {type: String},
+     "requesterId": {type: Number, required: true}, //change type from ObjectId
+     "requesterName": {type: String, required: true}
+};
+
 app.factory('serviceOptions', function() {
      var factory = {};
      var options = {};
+     options.isSet = false;
      factory.getOptions = function(){
           return this.options;
      };
      factory.setOptions = function(serviceOptions){
           this.options = serviceOptions;
+          this.options.isSet = true;
      };
+     factory.postOrder = function(){
+          if (!this.options.isSet){
+               console.error("Options are not set");
+               return;
+          }
+
+          $http.post(API + '/postOptions', options).success(function(data) {
+
+          });
+     }
      return factory;
 });
 
+
+
 app.controller('mainController', function(){
-     console.log("main.controller");
+
+});
+
+app.controller('thankyouController', function(){
+
 });
 
 var API = 'http://localhost:8000';
@@ -115,18 +172,12 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 
      $scope.options = serviceOptions.getOptions();
 
-     $scope.someQuote = function(someQuoteData) {
-          someQuoteData = $scope;
-     };
-     /*--------------------------------------------------------------------- */
-
-
      $scope.book = function() {
           // console.log("login controller")
           // credentials._id = $scope.username;
           // credentials.password = $scope.password;
-          console.log("you clicked");
-          var test = "string";
+
+
           $location.path('/payment');
           // $http.post(API + '/book', test).success(function(data) {
           //      // $cookies.put('Token', data.token);
@@ -136,15 +187,10 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
           // console.log(tvOptions)
 
      };
-
-     /* ------------------------------------------------------------*/
-               $scope.cancel = function() {
-                    $location.path('/');
-               };
-     /* ------------------------------------------------------------*/
+     $scope.cancel = function() {
+          $location.path('/');
+     };
 });
-
-
 
 app.controller('registerController', function($scope, $http, $location) {
      var credentials = {
@@ -175,7 +221,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           var total = 0;
           var numHours = Number($scope.numHours);
           total = numHours * 50;
-          
+
           if ($scope.brackets === 'no') {
                total = total + 100;
           }
@@ -186,7 +232,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                total = total + (numHours * 10);
           }
 
-          var tvOptions =  {
+          var options =  {
                service: "TV",
                wall: $scope.wall,
                brackets: $scope.brackets,
@@ -197,71 +243,184 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                total: total
           };
 
-          serviceOptions.setOptions(tvOptions);
-
+          serviceOptions.setOptions(options);
 
           $location.path('/quote/tv');
-
      };
 });
 
-app.controller('serviceController', function($rootScope, $scope, $http, $location, $routeParams) {
+app.controller('ceilingFanController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
      $scope.quote = function() {
 
           var total = 0;
           var numHours = Number($scope.numHours);
+          var numFans = Number($scope.numFans);
           total = numHours * 50;
-          // if (numHours = '') {
-          //
-          // }
-          if ($scope.brackets === 'no') {
+
+          if (numFans > 1) {
+               total = total + (numFans * 10);
+          }
+          if ($scope.installType === 'Repair') {
+               total = total + (numHours * 20);
+          }
+          if ($scope.haveFan === 'no') {
                total = total + 100;
           }
-          if ($scope.gt32 === 'yes') {
-               total = total + (numHours * 10);
-          }
-          if ($scope.wall === 'yes') {
+          if ($scope.needLadder === 'yes') {
                total = total + (numHours * 10);
           }
 
-          $rootScope.serviceOptions = {
-               wall: $scope.wall,
-               brackets: $scope.brackets,
-               gt32: $scope.gt32,
+          var options =  {
+               service: "Ceiling Fan",
+               numFans: $scope.numFans,
+               installType: $scope.installType,
+               haveFan: $scope.haveFan,
+               needLadder: $scope.needLadder,
                date: $scope.date,
                time: $scope.time,
                description: $scope.description,
                total: total
           };
-          $location.path('/quote/:service');
+
+          serviceOptions.setOptions(options);
+
+          $location.path('/quote/ceiling-fan');
 
      };
 });
 
-app.controller('paymentController', function($rootScope, $scope, $http, $location, $cookies, $routeParams) {
-     // $scope.pay = function() {
-     //   $location.path('/thankyou');
-     //   $http.post(API + '/orders', {
-     //     token: $cookies.get('Token'),
-     //     order: order
-     //   });
-     // };
-     // $rootScope.tvOptions = {
-     //      wall: $scope.wall,
-     //      brackets: $scope.brackets,
-     //      gt32: $scope.gt32,
-     //      date: $scope.date,
-     //      time: $scope.time,
-     //      description: $scope.description
-     //
-     // };
-     // $rootScope.tvOptions.moreStuff = 43;
+app.controller('holeInWallController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+     $scope.quote = function() {
 
+          var total = 0;
+          var numHours = Number($scope.numHours);
+          var numHoles = Number($scope.numHoles);
+          total = numHours * 50;
+
+          if (numHoles > 1) {
+               total = total + (numHoles * 10);
+          }
+          if ($scope.sizeHole === 'orange') {
+               total = total + (numHours * 10);
+          }
+          if ($scope.sizeHole === 'basketball') {
+               total = total + (numHours * 20);
+          }
+          if ($scope.typeWall === 'Paneling') {
+               total = total + (numHours * 20);
+          }
+          if ($scope.typeWall === 'Plaster') {
+               total = total + (numHours * 30);
+          }
+          if ($scope.needLadder === 'yes') {
+               total = total + (numHours * 10);
+          }
+
+          var options =  {
+               service: "Hole In Wall",
+               numHoles: $scope.numHoles,
+               typeWall: $scope.typeWall,
+               needLadder: $scope.needLadder,
+               date: $scope.date,
+               time: $scope.time,
+               description: $scope.description,
+               total: total
+          };
+
+          serviceOptions.setOptions(options);
+
+          $location.path('/quote/hole-in-wall');
+
+     };
+});
+
+app.controller('paymentController', function($rootScope, $scope, $http, $location, $cookies, $routeParams, serviceOptions) {
+     $scope.options = serviceOptions.getOptions();
+
+     $scope.pay = function() {
+
+          // $scope.options
+
+          $http.post(API + '/payment', $scope.options).success(function(data) {
+
+               console.log("made api call")
+               // $cookies.put('Token', data.token);
+               // $location.path('/services');
+          });
+
+
+          // options.service
+          // options.time
+          // options.date
+          // options.description
+          // options.total
+          // $scope.name
+          // $scope.address
+          // $scope.address2
+          // $scope.city
+          // $scope.state
+          // $scope.zip
+
+          // var amount = order.total * 100;
+
+          // var handler = StripeCheckout.configure({
+          //      key: 'pk_test_etAw7vNMpUggsCRpMvZTY8Gw',
+          //      locale: 'auto',
+          //      token: function(token) {
+          //           var tokenId = token.id;
+          //           return $http({
+          //                url: API + '/payment',
+          //                method: 'POST',
+          //                data: {
+          //                     amount: 100,
+          //                     token: tokenId
+          //                }
+          //           })
+          //           console.log("hello")
+          //           .success(function(data) {
+          //
+          //                // console.log('Charge: ', data);
+          //                // $http.post(API + 'orders', {
+          //                //      token: $cookies.get('Token'),
+          //                //      order: order
+          //                // });
+          //                console.log("hello");
+          //                console.log('Charge: ', data);
+          //
+          //                $http.post(API + 'orders', {
+          //                     token: $cookies.get('Token'),
+          //                     jobs: jobs
+          //                });
+          //
+          //                $location.path('/thankyou');
+          //
+          //           })
+          //           .catch(function(err) {
+          //                console.log(err);
+          //
+          //           });
+          //      }
+          // });
+          // handler.open({
+          //      name: 'Auturgus Handyman App',
+          //      description: '2 widgets',
+          //      amount: 2000
+          // });
+          // handler.open({
+          //      name: 'Auturgus Handyman App',
+          //      description: 'Test Card #: 4242 4242 4242 4242',
+          //      // amount: amount
+          //      amount: 100
+          //
+          // });
+
+     };
      $scope.cancel = function() {
           $location.path('/');
      };
-     // $scope.order = order;
+     $scope.jobs = jobs;
 });
+
 
 app.run(function($rootScope, $location, $cookies) {
      $rootScope.$on('$locationChangeStart', function(event, nextUrl, currentUrl) {

@@ -1,59 +1,75 @@
-<div class="col-md-8"><a href="#/"><img src="images/dc-roasters.png" alt="" /></a></div>
-
+<!-- <div class="col-md-8"><a href="#/"><img src="images/dc-roasters.png" alt="" /></a></div> -->
 <div>
      <table style="width:50%" ng-model="order">
-          <tr class="tableHeader">
-               <th colspan="2">Your Job</th>
-          </tr>
+
           <tr>
                <td>Job</td>
-               <td>TV Install</td>
-          </tr>
-          <tr>
-               <td>Date</td>
-               <td>{{tvOptions.date}}</td>
+               <td>{{options.service}}</td>
           </tr>
 
           <tr>
                <td>Time</td>
-               <td>{{tvOptions.time}}</td>
-          </tr>
-
-          <tr>
-               <td>Full Name</td>
-               <td>{{order.address.name}}</td>
+               <td>{{options.time}}</td>
           </tr>
           <tr>
-               <td>Address</td>
-               <td>{{order.address.address}}</td>
-          </tr>
-          <tr>
-               <td>Address 2</td>
-               <td>{{order.address.address2}}</td>
-          </tr>
-          <tr>
-               <td>City</td>
-               <td>{{order.address.city}}</td>
-          </tr>
-          <tr>
-               <td>State</td>
-               <td>{{order.address.state}}</td>
-          </tr>
-          <tr>
-               <td>Zip Code</td>
-               <td>{{order.address.zipCode}}</td>
+               <td>Date</td>
+               <td>{{options.date}}</td>
           </tr>
 
 
-
+          <tr>
+               <td>Description</td>
+               <td>{{options.description}}</td>
+          </tr>
 
           <tr>
                <td>Total</td>
-               <td>{{tvOptions.total}}</td>
+               <td>{{options.total}}</td>
           </tr>
      </table>
      <br>
-     <input type="submit" name="submit" class="btn btn-info" value="Pay With Card" ng-click="pay()">
+
+</div>
+
+<div class="form-group">
+     <label for="usr">Name:</label>
+     <input type="text" class="form-control" ng-model="name" id="name" >
+</div>
+<div class="form-group">
+     <label for="Address">Address:</label>
+     <input type="text" class="form-control" ng-model="address" id="address">
+</div>
+<div class="form-group">
+     <label for="Address2">Address2:</label>
+     <input type="text" class="form-control" ng-model="address2" id="address2">
+</div>
+<div class="form-group">
+     <label for="city">City:</label>
+     <input type="text" class="form-control" ng-model="city" id="city">
+</div>
+<div class="form-group">
+     <label for="state">State:</label>
+     <input type="text" class="form-control" ng-model="state" id="state">
+</div>
+<div class="form-group">
+     <label for="zip">Zip:</label>
+     <input type="text" class="form-control" ng-model="zip" id="zip">
+</div>
+
+<div>
+     <table style="width:50%" ng-model="order">
+          <div class="tableHeader">
+               <div>Total</div>
+               <div>{{options.total}}</div>
+          </div>
+     </table>
+     <br>
+
+
      <input type="submit" name="submit" class="btn btn-info" value="Cancel" ng-click="cancel()">
 
 </div>
+
+
+
+     <input type="button" name="submit" class="btn btn-info" value="Pay With Card" ng-click="pay()">

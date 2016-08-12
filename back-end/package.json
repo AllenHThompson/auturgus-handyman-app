@@ -11,5 +11,8 @@
     "url": "auturgus-handyman-app"
   },
   "author": "Allen H. Thompson",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "stripe": "^4.9.0"
+  }
 }
