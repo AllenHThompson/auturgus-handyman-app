@@ -15,8 +15,9 @@ var Jobs = mongoose.model('jobs', {
           haveFan: {type: String},
           needLadder: {type: String},
           numHours: {type: Number},
-          date: {type: String},
-          time: {type: String},
+          timeStamp: { type: Date},
+          // date: {type: Date},
+          // time: {type: String},
           total: {type: String, required: true},
           description: {type: String}
      }],

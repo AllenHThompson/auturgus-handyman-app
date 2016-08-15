@@ -40,7 +40,7 @@ app.config(function($routeProvider){
 
      .when('/register', {
           templateUrl: 'register.html',
-          contrller: 'registerController'
+          controller: 'registerController'
      })
 
      .when('/payment', {
@@ -98,51 +98,57 @@ var jobs = {
 };
 
 // {
-//                     "status": false,
-//                     "orders": [{
-//                          "wall": null,
-//                          "brackets": null,
-//                          "gt32": true,
-//                          "numHoles": 1,
-//                          "sizeHole": "orange",
-//                          "typeWall": "plaster",
-//                          "numFans": 2,
-//                          "installType": null,
-//                          "haveFan": null,
-//                          "needLadder": false,
-//                          "numHours": 2,
-//                          "date": null,
-//                          "time": null,
-//                          "total": 100,
-//                          "description": "need tv on ceiling"
-//                     }],
-//                     "total": 100,
-//                     "description": "need tv on ceiling",
-//                     "providerId": null,
-//                     "providerName": null,
-//                     "requesterId": 2,
-//                     "requesterName": "Will"
-//                }
+// 	"status": false,
+// 	"orders": [{
+// 		"wall": null,
+// 		"brackets": null,
+// 		"gt32": true,
+// 		"numHoles": 1,
+// 		"sizeHole": "orange",
+// 		"typeWall": "plaster",
+// 		"numFans": 2,
+// 		"installType": null,
+// 		"haveFan": null,
+// 		"needLadder": false,
+// 		"numHours": 2,
+// 		"date": null,
+// 		"time": null,
+// 		"total": 100,
+// 		"description": "need tv on ceiling"
+// 	}],
+// 	"total": 100,
+// 	"description": "need tv on ceiling",
+// 	"providerId": null,
+// 	"providerName": null,
+// 	"requesterId": 2,
+// 	"requesterName": "Will"
+// }
 
-app.factory('serviceOptions', function() {
+app.factory('serviceOptions', function($http) {
      var factory = {};
-     var options = {};
-     options.isSet = false;
      factory.getOptions = function(){
           return this.options;
      };
      factory.setOptions = function(serviceOptions){
           this.options = serviceOptions;
-          this.options.isSet = true;
      };
-     factory.postOrder = function(){
-          if (!this.options.isSet){
+     factory.postOrder = function(callback){
+          console.log("running");
+          if (!this.options){
                console.error("Options are not set");
                return;
           }
 
-          $http.post(API + '/postOptions', options).success(function(data) {
+          $http.post(API + '/postOrder', this.options)
+          .then(function(data) {
+               console.log("options: ", this.options)
+               console.log("result", data);
+               callback(data);
 
+          })
+          .catch(function(err){
+               console.log("err ", err);
+               callback(err)
           });
      }
      return factory;
@@ -175,10 +181,12 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
           credentials.password = $scope.password;
           $http.post(API + '/login', credentials).success(function(data) {
                $cookies.put('Token', data.token);
+               $cookies.put('requesterId', credentials._id)
+               $cookies.put('requesterName', data.name)
                $location.path('/services');
           });
 
-          console.log(credentials);
+
      };
 });
 
@@ -200,10 +208,16 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
      $scope.options = serviceOptions.getOptions();
 
      $scope.book = function() {
-          // console.log("login controller")
-          // credentials._id = $scope.username;
-          // credentials.password = $scope.password;
 
+          //need to call the factory
+
+          $http.post(API + '/postOrder', $scope.options).success(function(data) {
+
+               console.log("made api call")
+               console.log($scope.options)
+               // $cookies.put('Token', data.token);
+               // $location.path('/services');
+          });
 
           $location.path('/payment');
           // $http.post(API + '/book', test).success(function(data) {
@@ -220,13 +234,21 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 });
 
 app.controller('registerController', function($scope, $http, $location) {
+     console.log('registerController');
      var credentials = {
           "_id": null,
           "password": null,
-          "email": null
+          "email": null,
+          "name": null,
+          "address": null,
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null
      };
 
      $scope.register = function() {
+          // debugger
           console.log("register");
           if ($scope.password !== $scope.confirmPassword) {
                $location.path('/register');
@@ -234,6 +256,13 @@ app.controller('registerController', function($scope, $http, $location) {
                credentials._id = $scope.username;
                credentials.password = $scope.password;
                credentials.email = $scope.email;
+
+               credentials.name = $scope.name;
+               credentials.address = $scope.address;
+               credentials.address2 = $scope.address2;
+               credentials.city = $scope.city;
+               credentials.state = $scope.state;
+               credentials.zipCode = $scope.zip
                // console.log(credentials)
           }
           $http.post(API + '/signup', credentials).success(function(data) {
@@ -242,7 +271,7 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 });
 
-app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions, $cookies) {
      $scope.quote = function() {
 
           var total = 0;
@@ -259,18 +288,48 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                total = total + (numHours * 10);
           }
 
-          var options =  {
-               service: "TV",
-               wall: $scope.wall,
-               brackets: $scope.brackets,
-               gt32: $scope.gt32,
-               date: $scope.date,
-               time: $scope.time,
-               description: $scope.description,
-               total: total
-          };
+          var options = {
+     	"status": false,
+     	"orders": [{
+               "service": "TV",
+               "wall": $scope.wall,
+     		"brackets": $scope.brackets,
+     		"gt32": $scope.gt32,
+     		"numHoles": $scope.numHoles,
+     		"sizeHole": $scope.sizeHole,
+     		"typeWall": $scope.typeWall,
+     		"numFans": $scope.numFans,
+     		"installType": $scope.installType,
+     		"haveFan": $scope.haveFan,
+     		"needLadder": $scope.needLadder,
+     		"numHours": $scope.numHours,
+               "timeStamp": new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
+     		"total": 75,
+     		"description": $scope.description
+     	}],
+     	"total": 75,
+     	"description": $scope.description,
+     	"providerId": $scope.providerId,
+     	"providerName": $scope.providerName,
+     	"requesterId": $cookies.get('requesterId'),
+     	"requesterName": $cookies.get('requesterName')//$scope.requesterName
+     };
+          // var options =  {
+          //      service: "TV",
+          //      wall: $scope.wall,
+          //      brackets: $scope.brackets,
+          //      gt32: $scope.gt32,
+          //      date: $scope.date,
+          //      time: $scope.time,
+          //      description: $scope.description,
+          //      total: total
+          // };
 
+          console.log('options', options);
           serviceOptions.setOptions(options);
+          serviceOptions.postOrder(function(result){
+               console.log("post result", result);
+          });
 
           $location.path('/quote/tv');
      };
@@ -368,12 +427,12 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
 
           // $scope.options
 
-          $http.post(API + '/postOrder', $scope.options).success(function(data) {
-
-               console.log("made api call")
-               // $cookies.put('Token', data.token);
-               // $location.path('/services');
-          });
+          // $http.post(API + '/postOrder', $scope.options).success(function(data) {
+          //
+          //      console.log("made api call")
+          //      // $cookies.put('Token', data.token);
+          //      // $location.path('/services');
+          // });
 
 
           // options.service

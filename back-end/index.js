@@ -69,14 +69,12 @@ app.get('/services', function(request, response) {
      response.json(serviceOptions);
 });
 
-
-
-
-
-
 app.post('/postOrder', function(request, response) {
 
      var orders = request.body;
+
+     console.log("post order");
+     console.log(request.body);
 
      Jobs.findById(orders.id, function(err, res) {
 
@@ -85,38 +83,19 @@ app.post('/postOrder', function(request, response) {
                response.json({
                     status: "failed",
                     err: err
-               })
+               });
                return;
           }
           if (res === null) {
-               Jobs.create({
-                    status: orders.status,
-                    orders: [{
-                         wall: orders.wall,
-                         brackets: orders.brackets,
-                         gt32: orders.gt32,
-                         numHoles: orders.numHoles,
-                         sizeHole: orders.sizeHole,
-                         typeWall: orders.typeWall,
-                         numFans: orders.numFans,
-                         installType: orders.installType,
-                         haveFan: orders.haveFan,
-                         needLadder: orders.needLadder,
-                         numHours: orders.numHours,
-                         date: orders.date,
-                         time: orders.time,
-                         total: orders.total,
-                         description: orders.description
-                    }],
-                    total: orders.total,
-                    description: orders.description,
-                    providerId: orders.providerId,
-                    providerName: orders.providerName,
-                    requesterId: orders.requesterId,
-                    requesterName: orders.requesterName
-               }).then(function(){
+               Jobs.create(orders).then(function(){
                     response.json({
                          status: "ok",
+                    });
+               })
+               .catch(function(err){
+                    console.log("err ", err);
+                    response.json({
+                         status: "err ",
                     });
                });
 }
@@ -156,10 +135,8 @@ app.post('/signup', function(request, response) {
                          return;
                     }
                     console.log('the encrypted password is [' + hash + '].');
-                    myNewRequester = new Requester({
-                         _id: credentials._id, encryptedPassword: hash,
-                         email: credentials.email
-                    });
+                    credentials.encryptedPassword = hash;
+                    myNewRequester = new Requester(credentials);
                     myNewRequester.save(function(err) {
                          if (err) {
                               console.log('there was an error creating the new user in the database');
@@ -268,7 +245,8 @@ app.post('/login', function(request, response) {
                     response.status(200);
                     response.json({
                          "status": "ok",
-                         "token": token
+                         "token": token,
+                         "name": findResponse.name
                     });
                }
           });
