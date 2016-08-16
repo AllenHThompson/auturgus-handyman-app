@@ -71,8 +71,8 @@ app.config(function($routeProvider){
 // };
 
 var jobs = {
-     status: {type: Boolean, required: true},
-     orders: [{
+     // status: {type: Boolean, required: true},
+     jobs: [{
           "wall": {type: String},
           "brackets": {type: String},
           "gt32": {type: String},
@@ -86,6 +86,7 @@ var jobs = {
           "numHours": {type: Number},
           "date": {type: String},
           "time": {type: String},
+          "timeStamp": {type: Date},
           "total": {type: String, required: true},
           "description": {type: String}
      }],
@@ -212,15 +213,20 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 
      $scope.book = function() {
 
+          serviceOptions.postOrder(function(result){
+               console.log("post result", result);
+               serviceOptions.setOptionsId(result.orderID);
+          });
+
           //need to call the factory
 
-          $http.post(API + '/postOrder', $scope.options).success(function(data) {
-
-               console.log("made api call")
-               console.log($scope.options)
-               // $cookies.put('Token', data.token);
-               // $location.path('/services');
-          });
+          // $http.post(API + '/postOrder', $scope.options).success(function(data) {
+          //
+          //      console.log("made api call")
+          //      console.log($scope.options)
+          //      // $cookies.put('Token', data.token);
+          //      // $location.path('/services');
+          // });
 
           $location.path('/payment');
           // $http.post(API + '/book', test).success(function(data) {
@@ -292,22 +298,24 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           }
 
           var options =  {
+               requesterId: $cookies.get('requesterId'),
+
                service: "TV",
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
                description: $scope.description,
+               timeStamp: new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
                total: total
           };
 
           console.log('options', options);
           serviceOptions.setOptions(options);
-          serviceOptions.postOrder(function(result){
-               console.log("post result", result);
-               serviceOptions.setOptionsId(result.orderID);
-               $location.path('/quote/tv');
-          });
-
+          // serviceOptions.postOrder(function(result){
+          //      console.log("post result", result);
+          //      serviceOptions.setOptionsId(result.orderID);
+          // });
+          $location.path('/quote/tv');
      };
 });
 
@@ -347,7 +355,6 @@ app.controller('ceilingFanController', function($rootScope, $scope, $http, $loca
           serviceOptions.setOptions(options);
 
           $location.path('/quote/ceiling-fan');
-
      };
 });
 

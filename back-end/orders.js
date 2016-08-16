@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 /* database setup */
 
 var orders = mongoose.model('orders', {
+		requesterId: {type: String}, //added this Tuesday to link order to requester
+
 		wall:{ type: String },
 		brackets:{ type: Boolean },
 		gt32:{ type: Boolean },

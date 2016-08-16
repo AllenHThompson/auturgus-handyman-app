@@ -72,35 +72,24 @@ app.get('/services', function(request, response) {
 
 app.post('/postOrder', function(request, response) {
 
-     var orders = request.body;
+     var jobs = request.body;
 
      console.log("post order");
-     console.log(request.body);
+     console.log("request: ", request.body);
 
-     Orders.findById(orders._id, function(err, res) {
 
-          if (err) {
-               console.log("error");
-               response.json({
-                    status: "failed",
-                    err: err
-               });
-               return;
-          }
-          if (res === null) {
-               Orders.create(orders).then(function(result){
-                    response.json({
-                         status: "ok",
-                         orderID: result._id
-                    });
-               })
-               .catch(function(err){
-                    console.log("err ", err);
-                    response.json({
-                         status: "err ",
-                    });
-               });
-}
+     Jobs.create(jobs).then(function(result){
+          response.json({
+               status: "ok",
+               orderID: result._id
+          });
+     })
+     .catch(function(err){
+          console.log("err ", err);
+          response.json({
+               status: "err ",
+          });
+     });
           // if (res === null) {
           //      response.json({
           //           status: "ok",
@@ -109,8 +98,6 @@ app.post('/postOrder', function(request, response) {
           // }
           // We know there is no object like this one in the db
           // Create a new order
-
-     });
 
 });
 

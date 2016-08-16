@@ -1,5 +1,80 @@
 <!-- <div class="col-md-8"><a href="#/"><img src="images/dc-roasters.png" alt="" /></a></div> -->
-<div>
+<table class="table">
+     <thead>
+          <tr>
+               <th>Service</th>
+               <th>{{options.service}}</th>
+
+          </tr>
+     </thead>
+<tbody>
+     <!-- <tr ng-show="options.service">
+          <th scope="row">Job</th>
+          <td>{{options.service}}</td>
+     </tr> -->
+     <tr ng-show="options.wall">
+          <th scope="row">Wall</th>
+          <td>{{options.wall}}</td>
+     </tr>
+     <tr ng-show="options.brackets">
+          <th scope="row">Brackets</th>
+          <td>{{options.brackets}}</td>
+     </tr>
+     <tr ng-show="options.gt32">
+          <th scope="row">Gt32</th>
+          <td>{{ options.gt32 }}</td>
+     </tr>
+     <tr ng-show="options.numHoles">
+          <th scope="row">numHoles</th>
+          <td>{{options.numHoles}}</td>
+     </tr>
+     <tr ng-show="sizeHole">
+          <th scope="row">sizeHole</th>
+          <td>{{options.sizeHole}}</td>
+     </tr>
+     <tr ng-show="typeWall">
+          <th scope="row">typeWall</th>
+          <td>{{options.typeWall}}</td>
+     </tr>
+     <tr ng-show="numFans">
+          <th scope="row">numFans</th>
+          <td>{{options.numFans}}</td>
+     </tr>
+     <tr ng-show="options.installType">
+          <th scope="row">installType</th>
+          <td>{{options.installType}}</td>
+     </tr>
+     <tr ng-show="options.haveFan">
+          <th scope="row">haveFan</th>
+          <td>{{options.haveFan}}</td>
+     </tr>
+     <tr ng-show="options.needLadder">
+          <th scope="row">needLadder</th>
+          <td>{{options.needLadder}}</td>
+     </tr>
+     <tr ng-show="options.numHours">
+          <th scope="row">numHours</th>
+          <td>{{options.numHours}}</td>
+     </tr>
+     <tr ng-show="options.total">
+          <th scope="row">Total</th>
+          <td>{{options.total | currency}}</td>
+     </tr>
+     <tr ng-show="options.description">
+          <th scope="row">Description</th>
+          <td>{{options.description}}</td>
+     </tr>
+     <tr ng-show="options.timeStamp">
+          <th scope="row">Timestamp</th>
+          <td>{{options.timeStamp | date:'medium'}}</td>
+     </tr>
+
+
+
+</tbody>
+</table>
+
+<!-- <div>
      <table style="width:50%" ng-model="order">
 
           <tr>
@@ -29,7 +104,7 @@
      </table>
      <br>
 
-</div>
+</div> -->
 
 <div class="form-group">
      <label for="usr">Name:</label>
@@ -56,20 +131,11 @@
      <input type="text" class="form-control" ng-model="zip" id="zip">
 </div>
 
-<div>
-     <table style="width:50%" ng-model="order">
-          <div class="tableHeader">
-               <div>Total</div>
-               <div>{{options.total}}</div>
-          </div>
-     </table>
-     <br>
 
-
-     <input type="submit" name="submit" class="btn btn-info" value="Cancel" ng-click="cancel()">
-
-</div>
+<input type="submit" name="submit" class="btn btn-info" value="Cancel" ng-click="cancel()">
 
 
 
-     <input type="button" name="submit" class="btn btn-info" value="Pay With Card" ng-click="pay()">
+
+
+<input type="button" name="submit" class="btn btn-info" value="Pay With Card" ng-click="pay()">
