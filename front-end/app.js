@@ -125,33 +125,36 @@ var jobs = {
 // }
 
 app.factory('serviceOptions', function($http) {
-     var factory = {};
-     factory.getOptions = function(){
+     var serviceOptions = {};
+     serviceOptions.getOptions = function(){
           return this.options;
      };
-     factory.setOptions = function(serviceOptions){
+     serviceOptions.setOptions = function(serviceOptions){
           this.options = serviceOptions;
      };
-     factory.postOrder = function(callback){
+     serviceOptions.setOptionsId = function(orderID){
+          this.options._id = orderID;
+     };
+     serviceOptions.postOrder = function(callback){
           console.log("running");
-          if (!this.options){
+          if (!this.options || this.options == undefined){
                console.error("Options are not set");
                return;
           }
 
           $http.post(API + '/postOrder', this.options)
           .then(function(data) {
-               console.log("options: ", this.options)
+               console.log("options: ", this.options);
                console.log("result", data);
                callback(data);
 
           })
           .catch(function(err){
                console.log("err ", err);
-               callback(err)
+               callback(err);
           });
-     }
-     return factory;
+     };
+     return serviceOptions;
 });
 
 
@@ -288,50 +291,23 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
                total = total + (numHours * 10);
           }
 
-          var options = {
-     	"status": false,
-     	"orders": [{
-               "service": "TV",
-               "wall": $scope.wall,
-     		"brackets": $scope.brackets,
-     		"gt32": $scope.gt32,
-     		"numHoles": $scope.numHoles,
-     		"sizeHole": $scope.sizeHole,
-     		"typeWall": $scope.typeWall,
-     		"numFans": $scope.numFans,
-     		"installType": $scope.installType,
-     		"haveFan": $scope.haveFan,
-     		"needLadder": $scope.needLadder,
-     		"numHours": $scope.numHours,
-               "timeStamp": new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
-     		"total": 75,
-     		"description": $scope.description
-     	}],
-     	"total": 75,
-     	"description": $scope.description,
-     	"providerId": $scope.providerId,
-     	"providerName": $scope.providerName,
-     	"requesterId": $cookies.get('requesterId'),
-     	"requesterName": $cookies.get('requesterName')//$scope.requesterName
-     };
-          // var options =  {
-          //      service: "TV",
-          //      wall: $scope.wall,
-          //      brackets: $scope.brackets,
-          //      gt32: $scope.gt32,
-          //      date: $scope.date,
-          //      time: $scope.time,
-          //      description: $scope.description,
-          //      total: total
-          // };
+          var options =  {
+               service: "TV",
+               wall: $scope.wall,
+               brackets: $scope.brackets,
+               gt32: $scope.gt32,
+               description: $scope.description,
+               total: total
+          };
 
           console.log('options', options);
           serviceOptions.setOptions(options);
           serviceOptions.postOrder(function(result){
                console.log("post result", result);
+               serviceOptions.setOptionsId(result.orderID);
+               $location.path('/quote/tv');
           });
 
-          $location.path('/quote/tv');
      };
 });
 

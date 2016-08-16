@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var Requester = require('./requester');
 var Jobs = require('./jobs');
+var Orders = require('./orders');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var bcrypt = require('my-bcrypt');
@@ -76,7 +77,7 @@ app.post('/postOrder', function(request, response) {
      console.log("post order");
      console.log(request.body);
 
-     Jobs.findById(orders.id, function(err, res) {
+     Orders.findById(orders._id, function(err, res) {
 
           if (err) {
                console.log("error");
@@ -87,9 +88,10 @@ app.post('/postOrder', function(request, response) {
                return;
           }
           if (res === null) {
-               Jobs.create(orders).then(function(){
+               Orders.create(orders).then(function(result){
                     response.json({
                          status: "ok",
+                         orderID: result._id
                     });
                })
                .catch(function(err){
@@ -258,7 +260,7 @@ app.post('/orders', function(request, response){
      // console.log(response);
      var orderData = request.body;
      console.log(orderData);
-     User.findOne({"authenticationTokens.token" : orderData.token})
+     Requester.findOne({"authenticationTokens.token" : orderData.token})
      .then(function(findOneResponse) {
           findOneResponse.orders.push(orderData.order);
           console.log(orderData.order);
