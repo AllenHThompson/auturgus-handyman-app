@@ -72,13 +72,20 @@ app.get('/services', function(request, response) {
 
 app.post('/postOrder', function(request, response) {
 
-     var jobs = request.body;
+     var job = request.body.job;
+     var userInfo = request.body.userInfo;
 
      console.log("post order");
      console.log("request: ", request.body);
 
 
-     Jobs.create(jobs).then(function(result){
+     Jobs.create(job)
+     .then(function(){
+          return Requester.update(
+               { _id: job.requesterId },
+               { $set: userInfo });
+     })
+     .then(function(result){
           response.json({
                status: "ok",
                orderID: result._id

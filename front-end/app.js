@@ -213,10 +213,10 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 
      $scope.book = function() {
 
-          serviceOptions.postOrder(function(result){
-               console.log("post result", result);
-               serviceOptions.setOptionsId(result.orderID);
-          });
+          // serviceOptions.postOrder(function(result){
+          //      console.log("post result", result);
+          //      serviceOptions.setOptionsId(result.orderID);
+          // });
 
           //need to call the factory
 
@@ -408,7 +408,9 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
 
      $scope.pay = function() {
 
-          // $scope.options
+          $scope.options
+
+          $scope.options.paidInFull = 'true'
 
           // $http.post(API + '/postOrder', $scope.options).success(function(data) {
           //
@@ -416,6 +418,27 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
           //      // $cookies.put('Token', data.token);
           //      // $location.path('/services');
           // });
+          var userInfo = {
+               "name": $scope.name,
+               "address": $scope.address,
+               "address2": $scope.address2,
+               "city": $scope.city,
+               "state": $scope.state,
+               "zip": $scope.zip
+          };
+          var options = serviceOptions.getOptions();
+
+          $http.post(API + '/postOrder', {
+               job: options,
+               userInfo: userInfo
+          }).success(function(data) {
+
+
+
+               console.log(userInfo)
+               // $cookies.put('Token', data.token);
+               // $location.path('/services');
+          });
 
 
           // options.service

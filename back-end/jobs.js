@@ -23,6 +23,7 @@ var jobs = mongoose.model('jobs', {
      total:{ type: Number },
 	description:{ type: String },
 
+     // isPaid: {type: Boolean}
      isComplete: {type: Boolean}
 
 
