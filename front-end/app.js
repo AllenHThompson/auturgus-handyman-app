@@ -8,10 +8,14 @@ app.config(function($routeProvider){
           controller: 'mainController'
      })
 
+
+
      .when('/login', {
           templateUrl: 'login.html',
           controller: 'loginController'
      })
+
+
 
      .when('/services', {
           templateUrl: 'services.html',
@@ -47,6 +51,12 @@ app.config(function($routeProvider){
           templateUrl: 'payment.html',
           controller: 'paymentController'
      })
+
+     .when('/myjobs', {
+          templateUrl: 'myjobs.html',
+          controller: 'myJobsController'
+     })
+
      .when('/thankyou', {
           templateUrl: 'thankyou.html',
           controller: 'thankyouController'
@@ -168,6 +178,32 @@ app.controller('thankyouController', function(){
 
 });
 
+
+
+//I WANT THIS CONTROLLER TO GET JOB INFO FOR REQUESTERS AND DISPLAY ON 'MYJOBS.HTML'
+
+app.controller('myJobsController', function($scope, $http, $location, $routeParams, serviceOptions, $cookies){
+     var id = $cookies.get('requesterId');
+     console.log(id);
+
+     $http.get(API + '/myjobs/' + id).success(function(data) {
+
+          $scope.jobs = data;
+
+          console.log(data);
+
+
+          // $http.get(API + '/services').success(function(data) {
+          //      $scope.services = data;
+          // });
+     });
+});
+
+
+
+
+
+
 var API = 'http://localhost:8000';
 
 app.controller('loginController', function($scope, $http, $location, $cookies) {
@@ -185,12 +221,10 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
           credentials.password = $scope.password;
           $http.post(API + '/login', credentials).success(function(data) {
                $cookies.put('Token', data.token);
-               $cookies.put('requesterId', credentials._id)
-               $cookies.put('requesterName', data.name)
+               $cookies.put('requesterId', credentials._id);
+               $cookies.put('requesterName', data.name);
                $location.path('/services');
           });
-
-
      };
 });
 
@@ -243,7 +277,7 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 });
 
 app.controller('registerController', function($scope, $http, $location) {
-     console.log('registerController');
+
      var credentials = {
           "_id": null,
           "password": null,
@@ -319,7 +353,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
      };
 });
 
-app.controller('ceilingFanController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+app.controller('ceilingFanController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions, $cookies) {
      $scope.quote = function() {
 
           var total = 0;
@@ -341,14 +375,14 @@ app.controller('ceilingFanController', function($rootScope, $scope, $http, $loca
           }
 
           var options =  {
+               requesterId: $cookies.get('requesterId'),
                service: "Ceiling Fan",
                numFans: $scope.numFans,
                installType: $scope.installType,
                haveFan: $scope.haveFan,
                needLadder: $scope.needLadder,
-               date: $scope.date,
-               time: $scope.time,
                description: $scope.description,
+               timeStamp: new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
                total: total
           };
 
@@ -358,7 +392,7 @@ app.controller('ceilingFanController', function($rootScope, $scope, $http, $loca
      };
 });
 
-app.controller('holeInWallController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+app.controller('holeInWallController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions, $cookies) {
      $scope.quote = function() {
 
           var total = 0;
@@ -385,14 +419,18 @@ app.controller('holeInWallController', function($rootScope, $scope, $http, $loca
                total = total + (numHours * 10);
           }
 
+
+
           var options =  {
+               requesterId: $cookies.get('requesterId'),
                service: "Hole In Wall",
                numHoles: $scope.numHoles,
+               sizeHole: $scope.sizeHole,
                typeWall: $scope.typeWall,
+               haveFan: $scope.haveFan,
                needLadder: $scope.needLadder,
-               date: $scope.date,
-               time: $scope.time,
                description: $scope.description,
+               timeStamp: new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
                total: total
           };
 
@@ -432,8 +470,6 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
                job: options,
                userInfo: userInfo
           }).success(function(data) {
-
-
 
                console.log(userInfo)
                // $cookies.put('Token', data.token);
@@ -505,12 +541,13 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
           //      amount: 100
           //
           // });
-
+          $location.path('/thankyou'); //put this inside the callback function
      };
      $scope.cancel = function() {
           $location.path('/');
      };
      $scope.jobs = jobs;
+
 });
 
 

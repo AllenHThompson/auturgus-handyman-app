@@ -8,7 +8,7 @@ var jobs = mongoose.model('jobs', {
      timeStamp:     { type: Date},
 
 	requesterId: {type: String}, //added this Tuesday to link order to requester
-
+     service:{type: String}, //added this Wednesday to display on myjobs.html
 	wall:{ type: String },
 	brackets:{ type: Boolean },
 	gt32:{ type: Boolean },

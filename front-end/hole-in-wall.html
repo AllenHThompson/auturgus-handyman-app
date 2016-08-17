@@ -18,7 +18,7 @@
 
 <div class="form-group">
      <label for="sel3">What type of wall?</label>
-     <select class="form-control" id="sel3" ng-modle="typeWall">
+     <select class="form-control" id="sel3" ng-model="typeWall">
           <option>Paneling</option>
           <option>Drywall</option>
           <option>Plaster</option>
@@ -55,7 +55,7 @@
 
 <div class="form-group">
      <label for="comment">Describe your project:</label>
-     <textarea class="form-control" rows="5" id="comment"></textarea>
+     <textarea class="form-control" rows="5" id="comment" ng-model="description"></textarea>
 </div>
 
 <input type="submit" class="btn btn-info" value="Quote" ng-click="quote()">

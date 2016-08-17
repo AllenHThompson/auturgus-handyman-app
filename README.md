@@ -58,9 +58,9 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+(delete A step by step series of examples that tell you have to get a development env running)
 
-Stay what the step will be
+(delete Stay what the step will be)
 
 ```
 Give the example
@@ -72,7 +72,7 @@ And repeat
 until finished
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+(delete End with an example of getting some data out of the system or using it for a little demo)
 
 
 
@@ -96,6 +96,42 @@ Add additional notes about how to deploy this on a live system
 * JavaScript
 * Node.js
 * Express
+
+## Technologies, frameworks, & programming languages used
+* HTML5 & CSS3
+* Bootstrap
+* JavaScript
+* jQuery
+* MongoDB
+  * Mongoose
+* AngularJS
+* Express
+* Node.js
+
+
+
+## NPMs to install
+
+```node
+$ npm install express --save
+$ npm install mongoose --save
+$ npm install my-bcrypt --save
+$ npm install rand-token --save
+$ npm install body-parser --save
+$ npm install cors --save
+$ npm install stripe --save
+```
+
+var express = require('express');
+var app = express();
+var Requester = require('./requester');
+var Jobs = require('./jobs');
+var Orders = require('./orders');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var bcrypt = require('my-bcrypt');
+var randomtoken = require('rand-token');
+var cors = require('cors');
 
 
 

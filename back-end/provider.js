@@ -14,8 +14,6 @@ var Provider = mongoose.model('Provider', {
      state:         {type: String, required: true},
      zipCode:       {type: String, required: true},
 
-
-
 authenticationTokens:
 [
      {

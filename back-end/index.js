@@ -65,6 +65,44 @@ app.post('/payment', function(request, response){
      }
      });
 });
+/* ------------------------------------------------------------- */
+// app.get('/myjobs', getMyJobs);
+//
+// var getMyJobs = function(req, res){
+//      // get the user by their user id
+//      // search for jobs based on the user
+//      // give the jobs data back to the front end
+// };
+app.get('/myjobs/:id', function(request, response){
+
+     console.log("request.query == ", request.query);
+
+     var id = request.params.id;
+     Jobs.find({"requesterId" : id})
+     .then(function(resultFromMongo) {
+          response.json(resultFromMongo);
+     })
+     .catch(function(error) {
+          console.log('user with token [' + id + '] not found...');
+          console.error(error.message);
+          response.json({
+               "status": "fail",
+               "message": "unable to find orders"
+          });
+          return;
+     });
+
+     // var id = request.body;
+
+     // app.get('/myjobs', function(request, response) {
+     //      console.log("insude the /myjobs back-end")
+     //      response.json(data);
+     // });
+
+});
+/* ------------------------------------------------------------- */
+
+
 
 app.get('/services', function(request, response) {
      response.json(serviceOptions);
