@@ -8,10 +8,14 @@ app.config(function($routeProvider){
           controller: 'mainController'
      })
 
+
+
      .when('/login', {
           templateUrl: 'login.html',
           controller: 'loginController'
      })
+
+
 
      .when('/services', {
           templateUrl: 'services.html',
@@ -40,13 +44,19 @@ app.config(function($routeProvider){
 
      .when('/register', {
           templateUrl: 'register.html',
-          contrller: 'registerController'
+          controller: 'registerController'
      })
 
      .when('/payment', {
           templateUrl: 'payment.html',
           controller: 'paymentController'
      })
+
+     .when('/myjobs', {
+          templateUrl: 'myjobs.html',
+          controller: 'myJobsController'
+     })
+
      .when('/thankyou', {
           templateUrl: 'thankyou.html',
           controller: 'thankyouController'
@@ -71,8 +81,8 @@ app.config(function($routeProvider){
 // };
 
 var jobs = {
-     status: {type: Boolean, required: true},
-     orders: [{
+     // status: {type: Boolean, required: true},
+     jobs: [{
           "wall": {type: String},
           "brackets": {type: String},
           "gt32": {type: String},
@@ -86,6 +96,7 @@ var jobs = {
           "numHours": {type: Number},
           "date": {type: String},
           "time": {type: String},
+          "timeStamp": {type: Date},
           "total": {type: String, required: true},
           "description": {type: String}
      }],
@@ -97,28 +108,64 @@ var jobs = {
      "requesterName": {type: String, required: true}
 };
 
-app.factory('serviceOptions', function() {
-     var factory = {};
-     var options = {};
-     options.isSet = false;
-     factory.getOptions = function(){
+// {
+// 	"status": false,
+// 	"orders": [{
+// 		"wall": null,
+// 		"brackets": null,
+// 		"gt32": true,
+// 		"numHoles": 1,
+// 		"sizeHole": "orange",
+// 		"typeWall": "plaster",
+// 		"numFans": 2,
+// 		"installType": null,
+// 		"haveFan": null,
+// 		"needLadder": false,
+// 		"numHours": 2,
+// 		"date": null,
+// 		"time": null,
+// 		"total": 100,
+// 		"description": "need tv on ceiling"
+// 	}],
+// 	"total": 100,
+// 	"description": "need tv on ceiling",
+// 	"providerId": null,
+// 	"providerName": null,
+// 	"requesterId": 2,
+// 	"requesterName": "Will"
+// }
+
+app.factory('serviceOptions', function($http) {
+     var serviceOptions = {};
+     serviceOptions.getOptions = function(){
           return this.options;
      };
-     factory.setOptions = function(serviceOptions){
+     serviceOptions.setOptions = function(serviceOptions){
           this.options = serviceOptions;
-          this.options.isSet = true;
      };
-     factory.postOrder = function(){
-          if (!this.options.isSet){
+     serviceOptions.setOptionsId = function(orderID){
+          this.options._id = orderID;
+     };
+     serviceOptions.postOrder = function(callback){
+          console.log("running");
+          if (!this.options || this.options == undefined){
                console.error("Options are not set");
                return;
           }
 
-          $http.post(API + '/postOptions', options).success(function(data) {
+          $http.post(API + '/postOrder', this.options)
+          .then(function(data) {
+               console.log("options: ", this.options);
+               console.log("result", data);
+               callback(data);
 
+          })
+          .catch(function(err){
+               console.log("err ", err);
+               callback(err);
           });
-     }
-     return factory;
+     };
+     return serviceOptions;
 });
 
 
@@ -130,6 +177,32 @@ app.controller('mainController', function(){
 app.controller('thankyouController', function(){
 
 });
+
+
+
+//I WANT THIS CONTROLLER TO GET JOB INFO FOR REQUESTERS AND DISPLAY ON 'MYJOBS.HTML'
+
+app.controller('myJobsController', function($scope, $http, $location, $routeParams, serviceOptions, $cookies){
+     var id = $cookies.get('requesterId');
+     console.log(id);
+
+     $http.get(API + '/myjobs/' + id).success(function(data) {
+
+          $scope.jobs = data;
+
+          console.log(data);
+
+
+          // $http.get(API + '/services').success(function(data) {
+          //      $scope.services = data;
+          // });
+     });
+});
+
+
+
+
+
 
 var API = 'http://localhost:8000';
 
@@ -148,10 +221,10 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
           credentials.password = $scope.password;
           $http.post(API + '/login', credentials).success(function(data) {
                $cookies.put('Token', data.token);
+               $cookies.put('requesterId', credentials._id);
+               $cookies.put('requesterName', data.name);
                $location.path('/services');
           });
-
-          console.log(credentials);
      };
 });
 
@@ -173,10 +246,21 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
      $scope.options = serviceOptions.getOptions();
 
      $scope.book = function() {
-          // console.log("login controller")
-          // credentials._id = $scope.username;
-          // credentials.password = $scope.password;
 
+          // serviceOptions.postOrder(function(result){
+          //      console.log("post result", result);
+          //      serviceOptions.setOptionsId(result.orderID);
+          // });
+
+          //need to call the factory
+
+          // $http.post(API + '/postOrder', $scope.options).success(function(data) {
+          //
+          //      console.log("made api call")
+          //      console.log($scope.options)
+          //      // $cookies.put('Token', data.token);
+          //      // $location.path('/services');
+          // });
 
           $location.path('/payment');
           // $http.post(API + '/book', test).success(function(data) {
@@ -193,13 +277,21 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 });
 
 app.controller('registerController', function($scope, $http, $location) {
+
      var credentials = {
           "_id": null,
           "password": null,
-          "email": null
+          "email": null,
+          "name": null,
+          "address": null,
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null
      };
 
      $scope.register = function() {
+          // debugger
           console.log("register");
           if ($scope.password !== $scope.confirmPassword) {
                $location.path('/register');
@@ -207,6 +299,13 @@ app.controller('registerController', function($scope, $http, $location) {
                credentials._id = $scope.username;
                credentials.password = $scope.password;
                credentials.email = $scope.email;
+
+               credentials.name = $scope.name;
+               credentials.address = $scope.address;
+               credentials.address2 = $scope.address2;
+               credentials.city = $scope.city;
+               credentials.state = $scope.state;
+               credentials.zipCode = $scope.zip
                // console.log(credentials)
           }
           $http.post(API + '/signup', credentials).success(function(data) {
@@ -215,7 +314,7 @@ app.controller('registerController', function($scope, $http, $location) {
      };
 });
 
-app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+app.controller('tvController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions, $cookies) {
      $scope.quote = function() {
 
           var total = 0;
@@ -233,23 +332,28 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           }
 
           var options =  {
+               requesterId: $cookies.get('requesterId'),
+
                service: "TV",
                wall: $scope.wall,
                brackets: $scope.brackets,
                gt32: $scope.gt32,
-               date: $scope.date,
-               time: $scope.time,
                description: $scope.description,
+               timeStamp: new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
                total: total
           };
 
+          console.log('options', options);
           serviceOptions.setOptions(options);
-
+          // serviceOptions.postOrder(function(result){
+          //      console.log("post result", result);
+          //      serviceOptions.setOptionsId(result.orderID);
+          // });
           $location.path('/quote/tv');
      };
 });
 
-app.controller('ceilingFanController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+app.controller('ceilingFanController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions, $cookies) {
      $scope.quote = function() {
 
           var total = 0;
@@ -271,25 +375,24 @@ app.controller('ceilingFanController', function($rootScope, $scope, $http, $loca
           }
 
           var options =  {
+               requesterId: $cookies.get('requesterId'),
                service: "Ceiling Fan",
                numFans: $scope.numFans,
                installType: $scope.installType,
                haveFan: $scope.haveFan,
                needLadder: $scope.needLadder,
-               date: $scope.date,
-               time: $scope.time,
                description: $scope.description,
+               timeStamp: new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
                total: total
           };
 
           serviceOptions.setOptions(options);
 
           $location.path('/quote/ceiling-fan');
-
      };
 });
 
-app.controller('holeInWallController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions) {
+app.controller('holeInWallController', function($rootScope, $scope, $http, $location, $routeParams, serviceOptions, $cookies) {
      $scope.quote = function() {
 
           var total = 0;
@@ -316,14 +419,18 @@ app.controller('holeInWallController', function($rootScope, $scope, $http, $loca
                total = total + (numHours * 10);
           }
 
+
+
           var options =  {
+               requesterId: $cookies.get('requesterId'),
                service: "Hole In Wall",
                numHoles: $scope.numHoles,
+               sizeHole: $scope.sizeHole,
                typeWall: $scope.typeWall,
+               haveFan: $scope.haveFan,
                needLadder: $scope.needLadder,
-               date: $scope.date,
-               time: $scope.time,
                description: $scope.description,
+               timeStamp: new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes(), $scope.time.getSeconds()),
                total: total
           };
 
@@ -339,11 +446,32 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
 
      $scope.pay = function() {
 
-          // $scope.options
+          $scope.options
 
-          $http.post(API + '/payment', $scope.options).success(function(data) {
+          $scope.options.paidInFull = 'true'
 
-               console.log("made api call")
+          // $http.post(API + '/postOrder', $scope.options).success(function(data) {
+          //
+          //      console.log("made api call")
+          //      // $cookies.put('Token', data.token);
+          //      // $location.path('/services');
+          // });
+          var userInfo = {
+               "name": $scope.name,
+               "address": $scope.address,
+               "address2": $scope.address2,
+               "city": $scope.city,
+               "state": $scope.state,
+               "zip": $scope.zip
+          };
+          var options = serviceOptions.getOptions();
+
+          $http.post(API + '/postOrder', {
+               job: options,
+               userInfo: userInfo
+          }).success(function(data) {
+
+               console.log(userInfo)
                // $cookies.put('Token', data.token);
                // $location.path('/services');
           });
@@ -413,12 +541,13 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
           //      amount: 100
           //
           // });
-
+          $location.path('/thankyou'); //put this inside the callback function
      };
      $scope.cancel = function() {
           $location.path('/');
      };
      $scope.jobs = jobs;
+
 });
 
 

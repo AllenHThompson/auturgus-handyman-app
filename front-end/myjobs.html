@@ -1,0 +1,84 @@
+<table class="table">
+     <thead>
+          <tr>
+               <th>Service</th>
+
+               <th>Date</th>
+               <th>Description</th>
+               <th>Total</th>
+
+          </tr>
+
+     </thead>
+<tbody>
+     <tr ng-repeat="job in jobs">
+          <td><span ng-show="job.service">{{job.service}}</span></td>
+
+          <td><span ng-show="job.timeStamp">{{job.timeStamp | date:'medium'}}</span></td>
+          <td><span ng-show="job.description">{{job.description}}</span></td>
+          <td><span ng-show="job.total">{{job.total | currency}}</span></td>
+
+     </tr>
+
+     <!-- <td><span ng-show="job.gt32">{{job.gt32}}</span></td>
+     <td><span ng-show="job.test">{{job.test}}</span></td>
+     <td><span ng-show="job.wall">{{job.wall}}</span></td>
+     <td><span ng-show="job.brackets">{{job.brackets}}</span></td> -->
+
+     <!-- <tr ng-show="options.brackets">
+          <th scope="row">Brackets</th>
+          <td>{{options.brackets}}</td>
+     </tr>
+     <tr ng-show="options.gt32">
+          <th scope="row">Gt32</th>
+          <td>{{ options.gt32 }}</td>
+     </tr>
+     <tr ng-show="options.numHoles">
+          <th scope="row">numHoles</th>
+          <td>{{options.numHoles}}</td>
+     </tr>
+     <tr ng-show="options.sizeHole">
+          <th scope="row">sizeHole</th>
+          <td>{{options.sizeHole}}</td>
+     </tr>
+     <tr ng-show="options.typeWall">
+          <th scope="row">typeWall</th>
+          <td>{{options.typeWall}}</td>
+     </tr>
+     <tr ng-show="options.numFans">
+          <th scope="row">numFans</th>
+          <td>{{options.numFans}}</td>
+     </tr>
+     <tr ng-show="options.installType">
+          <th scope="row">installType</th>
+          <td>{{options.installType}}</td>
+     </tr>
+     <tr ng-show="options.haveFan">
+          <th scope="row">haveFan</th>
+          <td>{{options.haveFan}}</td>
+     </tr>
+     <tr ng-show="options.needLadder">
+          <th scope="row">needLadder</th>
+          <td>{{options.needLadder}}</td>
+     </tr>
+     <tr ng-show="options.numHours">
+          <th scope="row">numHours</th>
+          <td>{{options.numHours}}</td>
+     </tr>
+     <tr ng-show="options.total">
+          <th scope="row">Total</th>
+          <td>{{options.total | currency}}</td>
+     </tr>
+     <tr ng-show="options.description">
+          <th scope="row">Description</th>
+          <td>{{options.description}}</td>
+     </tr>
+     <tr ng-show="options.timeStamp">
+          <th scope="row">Timestamp</th>
+          <td>{{options.timeStamp | date:'medium'}}</td>
+     </tr>
+
+ -->
+
+</tbody>
+</table>

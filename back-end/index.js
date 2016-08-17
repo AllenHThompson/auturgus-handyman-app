@@ -1,12 +1,15 @@
 var express = require('express');
 var app = express();
 var Requester = require('./requester');
+var Jobs = require('./jobs');
+var Orders = require('./orders');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var bcrypt = require('my-bcrypt');
 var randomtoken = require('rand-token');
 var cors = require('cors');
 
+mongoose.set('debug', true);
 
 var API_STRIPE_TEST_SECRET_KEY = "sk_test_tTmnADuLXcyI0U2xIpdghVzw";
 var API_STRIPE_TEST_PUBLISH_KEY = "pk_test_etAw7vNMpUggsCRpMvZTY8Gw";
@@ -62,45 +65,85 @@ app.post('/payment', function(request, response){
      }
      });
 });
+/* ------------------------------------------------------------- */
+// app.get('/myjobs', getMyJobs);
+//
+// var getMyJobs = function(req, res){
+//      // get the user by their user id
+//      // search for jobs based on the user
+//      // give the jobs data back to the front end
+// };
+app.get('/myjobs/:id', function(request, response){
+
+     console.log("request.query == ", request.query);
+
+     var id = request.params.id;
+     Jobs.find({"requesterId" : id})
+     .then(function(resultFromMongo) {
+          response.json(resultFromMongo);
+     })
+     .catch(function(error) {
+          console.log('user with token [' + id + '] not found...');
+          console.error(error.message);
+          response.json({
+               "status": "fail",
+               "message": "unable to find orders"
+          });
+          return;
+     });
+
+     // var id = request.body;
+
+     // app.get('/myjobs', function(request, response) {
+     //      console.log("insude the /myjobs back-end")
+     //      response.json(data);
+     // });
+
+});
+/* ------------------------------------------------------------- */
+
+
 
 app.get('/services', function(request, response) {
      response.json(serviceOptions);
 });
 
-
-
-
-
-
 app.post('/postOrder', function(request, response) {
 
-     var options = request.body;
+     var job = request.body.job;
+     var userInfo = request.body.userInfo;
 
-     response.json(serviceOptions);
+     console.log("post order");
+     console.log("request: ", request.body);
 
-     Jobs.create(
-          credentials._id,
-          { $push:
-               {
-                    authenticationTokens:
-                    {
-                         "token" : token,
-                         "expires" : expirationDate
-                    }
-               }
-          },
-          function(err, reply) {
-               if (err) {
-                    console.error(err.message);
-                    return;
-               }
-               console.log('Updated succeeded', reply);
-          }
-     );
 
-     Jobs.findOne({objectId: objectId}, function(err, res) {
-
+     Jobs.create(job)
+     .then(function(){
+          return Requester.update(
+               { _id: job.requesterId },
+               { $set: userInfo });
+     })
+     .then(function(result){
+          response.json({
+               status: "ok",
+               orderID: result._id
+          });
+     })
+     .catch(function(err){
+          console.log("err ", err);
+          response.json({
+               status: "err ",
+          });
      });
+          // if (res === null) {
+          //      response.json({
+          //           status: "ok",
+          //           data: data
+          //      }), Jobs.create({data: data})
+          // }
+          // We know there is no object like this one in the db
+          // Create a new order
+
 });
 
 
@@ -126,10 +169,8 @@ app.post('/signup', function(request, response) {
                          return;
                     }
                     console.log('the encrypted password is [' + hash + '].');
-                    myNewRequester = new Requester({
-                         _id: credentials._id, encryptedPassword: hash,
-                         email: credentials.email
-                    });
+                    credentials.encryptedPassword = hash;
+                    myNewRequester = new Requester(credentials);
                     myNewRequester.save(function(err) {
                          if (err) {
                               console.log('there was an error creating the new user in the database');
@@ -238,7 +279,8 @@ app.post('/login', function(request, response) {
                     response.status(200);
                     response.json({
                          "status": "ok",
-                         "token": token
+                         "token": token,
+                         "name": findResponse.name
                     });
                }
           });
@@ -250,7 +292,7 @@ app.post('/orders', function(request, response){
      // console.log(response);
      var orderData = request.body;
      console.log(orderData);
-     User.findOne({"authenticationTokens.token" : orderData.token})
+     Requester.findOne({"authenticationTokens.token" : orderData.token})
      .then(function(findOneResponse) {
           findOneResponse.orders.push(orderData.order);
           console.log(orderData.order);

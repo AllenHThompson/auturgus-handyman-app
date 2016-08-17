@@ -1,34 +1,164 @@
+<!-- <h1>ID: {{options._id}}</h1> -->
 <div>
      <table style="width:50%" ng-model="order">
 
-          <tr>
-               <td>Job</td>
-               <td>{{options.service}}</td>
-          </tr>
+          <!-- <tr ng-show="options.service">
 
-          <tr>
-               <td>Time</td>
-               <td>{{options.time}}</td>
-          </tr>
-          <tr>
-               <td>Date</td>
-               <td>{{options.date}}</td>
-          </tr>
+               <td>Job: {{options.service}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.wall">
+
+               <td>Wall: {{options.wall}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.brackets">
+
+               <td>brackets: {{options.brackets}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.gt32">
+
+               <td>gt32: {{ options.gt32 }}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.numHoles">
+
+               <td>numHolels: {{options.numHoles}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.sizeHole">
+
+               <td>sizeHole: {{options.sizeHole}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.typeWall">
+
+               <td>typeWall: {{options.typeWall}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.numFans">
+
+               <td>numFans: {{options.numFans}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.installType">
+
+               <td>installType: {{options.installType}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.haveFan">
+
+               <td>haveFan: {{options.haveFan}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.needLadder">
+
+               <td>needLadder: {{options.needLadder}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.numHours">
+
+               <td>numHours: {{options.numHours}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.total">
+
+               <td>total: {{options.total}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.description">
+
+               <td>description: {{options.description}}</td>
+          </tr> -->
+          <!-- <tr ng-show="options.timeStamp">
+
+               <td>timeStamp: {{options.timeStamp}}</td>
+          </tr> -->
 
 
-          <tr>
-               <td>Description</td>
-               <td>{{options.description}}</td>
-          </tr>
 
-          <tr>
-               <td>Total</td>
-               <td>{{options.total}}</td>
-          </tr>
+          <!-- wall: {{options.wall}}, -->
+          <!-- brackets:{{options.brackets}}, -->
+          <!-- gt32:{{ options.gt32 }}, -->
+          <!-- numHoles:{{options.numHoles}}, -->
+          <!-- sizeHole:{{options.sizeHole}}, -->
+          <!-- typeWall:{{options.typeWall}}, -->
+          <!-- numFans:{{options.numFans}}, -->
+          <!-- installType:{{options.installType}}, -->
+          <!-- haveFan:{{options.haveFan}}, -->
+          <!-- needLadder:{{options.needLadder}}, -->
+          <!-- numHours:{{options.numHours}}, -->
+          <!-- total:{{options.total}}, -->
+          <!-- description:{{options.description}} -->
+          <!-- timeStamp:{{options.timeStamp}} -->
+
      </table>
      <br>
 
 </div>
+
+<table class="table">
+     <thead>
+          <tr>
+               <th>Service</th>
+               <th>{{options.service}}</th>
+
+          </tr>
+     </thead>
+<tbody>
+     <!-- <tr ng-show="options.service">
+          <th scope="row">Job</th>
+          <td>{{options.service}}</td>
+     </tr> -->
+     <tr ng-show="options.wall">
+          <th scope="row">Wall</th>
+          <td>{{options.wall}}</td>
+     </tr>
+     <tr ng-show="options.brackets">
+          <th scope="row">Brackets</th>
+          <td>{{options.brackets}}</td>
+     </tr>
+     <tr ng-show="options.gt32">
+          <th scope="row">Gt32</th>
+          <td>{{ options.gt32 }}</td>
+     </tr>
+     <tr ng-show="options.numHoles">
+          <th scope="row">numHoles</th>
+          <td>{{options.numHoles}}</td>
+     </tr>
+     <tr ng-show="options.sizeHole">
+          <th scope="row">sizeHole</th>
+          <td>{{options.sizeHole}}</td>
+     </tr>
+     <tr ng-show="options.typeWall">
+          <th scope="row">typeWall</th>
+          <td>{{options.typeWall}}</td>
+     </tr>
+     <tr ng-show="options.numFans">
+          <th scope="row">numFans</th>
+          <td>{{options.numFans}}</td>
+     </tr>
+     <tr ng-show="options.installType">
+          <th scope="row">installType</th>
+          <td>{{options.installType}}</td>
+     </tr>
+     <tr ng-show="options.haveFan">
+          <th scope="row">haveFan</th>
+          <td>{{options.haveFan}}</td>
+     </tr>
+     <tr ng-show="options.needLadder">
+          <th scope="row">needLadder</th>
+          <td>{{options.needLadder}}</td>
+     </tr>
+     <tr ng-show="options.numHours">
+          <th scope="row">numHours</th>
+          <td>{{options.numHours}}</td>
+     </tr>
+     <tr ng-show="options.total">
+          <th scope="row">Total</th>
+          <td>{{options.total | currency}}</td>
+     </tr>
+     <tr ng-show="options.description">
+          <th scope="row">Description</th>
+          <td>{{options.description}}</td>
+     </tr>
+     <tr ng-show="options.timeStamp">
+          <th scope="row">Timestamp</th>
+          <td>{{options.timeStamp | date:'medium'}}</td>
+     </tr>
+
+
+
+</tbody>
+</table>
 
 <!-- {{$scope.total}}
 {{$rootScope.total}}
