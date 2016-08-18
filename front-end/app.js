@@ -60,6 +60,10 @@ app.config(function($routeProvider){
      .when('/thankyou', {
           templateUrl: 'thankyou.html',
           controller: 'thankyouController'
+     })
+     .when('/logout', {
+          templateUrl: 'home.html',
+          controller: 'logoutController'
      });
 });
 
@@ -104,8 +108,8 @@ var jobs = {
      "description": {type: String},
      "providerId": {type: Number}, //change type from ObjectId
      "providerName": {type: String},
-     "requesterId": {type: Number, required: true}, //change type from ObjectId
-     "requesterName": {type: String, required: true}
+     "userId": {type: Number, required: true}, //change type from ObjectId
+     "userName": {type: String, required: true}
 };
 
 // {
@@ -178,12 +182,29 @@ app.controller('thankyouController', function(){
 
 });
 
+app.controller('logoutController', function($cookies){
+
+     // console.log("YOU ARE TRYING TO LOGOUT")
+     //
+     // console.log("delelte these: ",$cookies.getAll())
+
+     for(var cookie in $cookies.getAll()) {
+          if($cookies.getAll().hasOwnProperty(cookie)) {
+               $cookies.remove(cookie);
+
+          }
+     }
+     // console.log("delelte these: ",$cookies.getAll())
+
+
+
+});
 
 
 //I WANT THIS CONTROLLER TO GET JOB INFO FOR REQUESTERS AND DISPLAY ON 'MYJOBS.HTML'
 
 app.controller('myJobsController', function($scope, $http, $location, $routeParams, serviceOptions, $cookies){
-     var id = $cookies.get('requesterId');
+     var id = $cookies.get('userId');
      console.log(id);
 
      $http.get(API + '/myjobs/' + id).success(function(data) {
@@ -216,15 +237,22 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
      };
 
      $scope.login = function() {
-          // console.log("login controller")
           credentials._id = $scope.username;
           credentials.password = $scope.password;
-          $http.post(API + '/login', credentials).success(function(data) {
-               $cookies.put('Token', data.token);
-               $cookies.put('requesterId', credentials._id);
-               $cookies.put('requesterName', data.name);
-               $location.path('/services');
-          });
+          console.log("login controller creds: ", credentials);
+          $http.post(API + '/login', credentials)
+               .success(function(data) {
+                    $cookies.put('Token', data.token);
+                    $cookies.put('userId', credentials._id);
+                    $cookies.put('userName', data.name);
+                    $cookies.put('type', data.type);
+
+                    if (data.type === "requester"){
+                         $location.path('/services');
+                    } else {
+                         $location.path('/providerPage');
+                    }
+               });
      };
 });
 
@@ -279,6 +307,7 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
 app.controller('registerController', function($scope, $http, $location) {
 
      var credentials = {
+          "type": null,
           "_id": null,
           "password": null,
           "email": null,
@@ -296,6 +325,7 @@ app.controller('registerController', function($scope, $http, $location) {
           if ($scope.password !== $scope.confirmPassword) {
                $location.path('/register');
           } else {
+               credentials.type=$scope.user.type;
                credentials._id = $scope.username;
                credentials.password = $scope.password;
                credentials.email = $scope.email;
@@ -306,7 +336,7 @@ app.controller('registerController', function($scope, $http, $location) {
                credentials.city = $scope.city;
                credentials.state = $scope.state;
                credentials.zipCode = $scope.zip
-               // console.log(credentials)
+               console.log(credentials)
           }
           $http.post(API + '/signup', credentials).success(function(data) {
                $location.path('/login');
@@ -332,7 +362,7 @@ app.controller('tvController', function($rootScope, $scope, $http, $location, $r
           }
 
           var options =  {
-               requesterId: $cookies.get('requesterId'),
+               userId: $cookies.get('userId'),
 
                service: "TV",
                wall: $scope.wall,
@@ -375,7 +405,7 @@ app.controller('ceilingFanController', function($rootScope, $scope, $http, $loca
           }
 
           var options =  {
-               requesterId: $cookies.get('requesterId'),
+               userId: $cookies.get('userId'),
                service: "Ceiling Fan",
                numFans: $scope.numFans,
                installType: $scope.installType,
@@ -422,7 +452,7 @@ app.controller('holeInWallController', function($rootScope, $scope, $http, $loca
 
 
           var options =  {
-               requesterId: $cookies.get('requesterId'),
+               userId: $cookies.get('userId'),
                service: "Hole In Wall",
                numHoles: $scope.numHoles,
                sizeHole: $scope.sizeHole,
@@ -557,10 +587,13 @@ app.run(function($rootScope, $location, $cookies) {
           currentUrl = currentUrl.split('#');
           nextUrl = nextUrl.split('#');
           token = $cookies.get('Token');
+          type = $cookies.get('type')
 
-          // console.log("token:" + token, "currentUrl:" + currentUrl, "nextUrl:" + nextUrl)
+          console.log("token:" + token, "currentUrl:" + currentUrl, "nextUrl:" + nextUrl)
 
           if (token === undefined) {
+
+
                if (nextUrl[1] === '/') {
                     $location.path('/');
                } else if (nextUrl[1] === '/login') {
@@ -568,16 +601,27 @@ app.run(function($rootScope, $location, $cookies) {
                } else if (nextUrl[1] === '/register') {
                     $location.path('/register');
                } else if (nextUrl[1] === '/services') {
-                    $location.path('/services');
+                    $location.path('/login');
                } else if (nextUrl[1] === '/quote') {
-                    $location.path('/quote');
+                    $location.path('/login');
                } else if (nextUrl[1] === '/payment') {
-                    $location.path('/payment');
+                    $location.path('/login');
                }
           }
           if (token !== undefined) {
+               if (type === "provider") {
+
+                    if (nextUrl[1] === '/services') {
+                         $location.path('/home');
+                    } else if (nextUrl[1] === '/quote') {
+                         $location.path('/home');
+                    } else if (nextUrl[1] === '/payment') {
+                         $location.path('/home');
+                    }
+               }
                $location.path(nextUrl[1]);
           }
+
           $cookies.put('nextUrl', nextUrl[1]);
      });
 });

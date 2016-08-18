@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
-var Requester = require('./requester');
+
 var Jobs = require('./jobs');
+var User = require('./user');
 var Orders = require('./orders');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -39,7 +40,7 @@ var serviceOptions = [
      "Mount 3 TVs"
 ];
 
-var myNewRequester;
+var myNewUser;
 
 /* Routes */
 app.post('/payment', function(request, response){
@@ -78,7 +79,7 @@ app.get('/myjobs/:id', function(request, response){
      console.log("request.query == ", request.query);
 
      var id = request.params.id;
-     Jobs.find({"requesterId" : id})
+     Jobs.find({"userId" : id})
      .then(function(resultFromMongo) {
           response.json(resultFromMongo);
      })
@@ -119,8 +120,8 @@ app.post('/postOrder', function(request, response) {
 
      Jobs.create(job)
      .then(function(){
-          return Requester.update(
-               { _id: job.requesterId },
+          return user.update(
+               { _id: job.userId },
                { $set: userInfo });
      })
      .then(function(result){
@@ -154,7 +155,7 @@ app.post('/postOrder', function(request, response) {
 app.post('/signup', function(request, response) {
      var credentials = request.body;
      console.log(credentials);
-     Requester.findOne({_id: credentials._id}, function(err, res){
+     User.findOne({_id: credentials._id}, function(err, res){
           if (err) {
                console.error(err.message);
                return;
@@ -170,8 +171,8 @@ app.post('/signup', function(request, response) {
                     }
                     console.log('the encrypted password is [' + hash + '].');
                     credentials.encryptedPassword = hash;
-                    myNewRequester = new Requester(credentials);
-                    myNewRequester.save(function(err) {
+                    myNewUser = new User(credentials);
+                    myNewUser.save(function(err) {
                          if (err) {
                               console.log('there was an error creating the new user in the database');
                               console.error(err.message);
@@ -206,7 +207,8 @@ app.post('/login', function(request, response) {
           var credentials = request.body;
           // response.send('ok');
 
-          Requester.findOne({_id: credentials._id }, function(error, findResponse){
+          User.findOne({_id: credentials._id }, function(error, findResponse){
+               console.log("id: ", credentials._id)
                if(error){
                     console.log('an error occured while reading data for user [' + credentials._id + '] from the database]');
                     console.error(error.message);
@@ -214,9 +216,22 @@ app.post('/login', function(request, response) {
                }
 
                /* OK - we read the user.  Does the password match? use the bcrypt compare() method */
+
+               /* NEED TO PREVENT ERROR WHEN encryptedPassword IS NULL*/
+               /*CREATE PROVIDERPAGE */
+               /*ADD A BUNCH OF USER INFORMATION*/
+               /* HOW TO STYLE THIS THING*/
+
+               if (findResponse.encryptedPassword === null){
+                    response.json({
+                         "status": "fail",
+                         "message": "please register"
+                    });
+               } else {
+               console.log("find response: ", findResponse)
                console.log('checking data for user [' + credentials._id + ']');
-               console.log(findResponse.encryptedPassword);
-               console.log(credentials.password);
+               console.log("encryptedPassword: ",findResponse.encryptedPassword);
+               console.log("password: ",credentials.password);
                bcrypt.compare(credentials.password, findResponse.encryptedPassword, function(err, res) {
                     if (err) {
                          console.log('an error occured comparing passwords');
@@ -255,7 +270,7 @@ app.post('/login', function(request, response) {
                     var expirationDate = new Date();
                     expirationDate.setDate(expirationDate.getDate() + 10);
 
-                    Requester.findByIdAndUpdate(
+                    User.findByIdAndUpdate(
                          credentials._id,
                          { $push:
                               {
@@ -280,10 +295,12 @@ app.post('/login', function(request, response) {
                     response.json({
                          "status": "ok",
                          "token": token,
-                         "name": findResponse.name
+                         "name": findResponse.name,
+                         "type": findResponse.type
                     });
                }
           });
+          }
      });
 
 });
@@ -292,7 +309,7 @@ app.post('/orders', function(request, response){
      // console.log(response);
      var orderData = request.body;
      console.log(orderData);
-     Requester.findOne({"authenticationTokens.token" : orderData.token})
+     User.findOne({"authenticationTokens.token" : orderData.token})
      .then(function(findOneResponse) {
           findOneResponse.orders.push(orderData.order);
           console.log(orderData.order);
@@ -314,7 +331,7 @@ app.post('/orders', function(request, response){
 app.get('/orders', function(request, response){
      var tokenData = request.query.token;
 
-     Requester.findOne({"authenticationTokens.token" : tokenData})
+     User.findOne({"authenticationTokens.token" : tokenData})
      .then(function(findOneResponse) {
           console.log(findOneResponse.orders);
           response.json(findOneResponse.orders);
