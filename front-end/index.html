@@ -1,37 +1,70 @@
 <!DOCTYPE html>
 <html ng-app="my-app">
-     <head>
-          <meta charset="utf-8">
-          <title></title>
-          <script src="dependencies/angular.js"></script>
-          <script src="dependencies/angular-route.js"></script>
-          <script src="dependencies/angular-cookies.js"></script>
-          <script src="dependencies/jquery.js"></script>
+<head>
+     <meta charset="utf-8">
+     <title></title>
+     <script src="dependencies/angular.js"></script>
+     <script src="dependencies/angular-route.js"></script>
+     <script src="dependencies/angular-cookies.js"></script>
+     <script src="dependencies/jquery.js"></script>
 
-          <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-          <script src="https://checkout.stripe.com/checkout.js"></script>
-          <!-- <script type="text/javascript">
-            Stripe.setPublishableKey('pk_test_etAw7vNMpUggsCRpMvZTY8Gw');
-            var handler = StripeCheckout.configure({
-                 key: 'pk_test_etAw7vNMpUggsCRpMvZTY8Gw',
-                 image: "/img/documentation/checkout/marketplace.png",
-                 locale: 'auto',
-                 token: function(token) {
+     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+     <script src="https://checkout.stripe.com/checkout.js"></script>
+     <!-- <script type="text/javascript">
+     Stripe.setPublishableKey('pk_test_etAw7vNMpUggsCRpMvZTY8Gw');
+     var handler = StripeCheckout.configure({
+     key: 'pk_test_etAw7vNMpUggsCRpMvZTY8Gw',
+     image: "/img/documentation/checkout/marketplace.png",
+     locale: 'auto',
+     token: function(token) {
 
-                 }
-            });
-          </script> -->
+}
+});
+</script> -->
 
-          <script src="app.js"></script>
-          <link rel="stylesheet" href="css/bootstrap.css">
-          <link rel="stylesheet" href="css/style.css">
-          <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
-     </head>
-     <body>
+<script src="app.js"></script>
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
+</head>
+<body>
 
-          <a href="#/logout" class="btn btn-info" role="button">Logout</a>
+     <nav class="navbar navbar-default">
+          <div class="container-fluid">
+               <!-- Brand and toggle get grouped for better mobile display -->
+               <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                         <span class="sr-only">Toggle navigation</span>
+                         <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                    </button>
+                    <!-- <a class="navbar-brand" href="#">Brand</a> -->
+               </div>
 
-          <ng-view></ng-view>
+               <!-- Collect the nav links, forms, and other content for toggling -->
+               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                         <!-- <li class="active"><a href="#">Link</a></li> -->
 
-     </body>
+                         <li><a href="#/login">Login</a></li>
+                         <li><a href="#/register">Register</a></li>
+                         <li><a href="#/back">Back</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+
+                         <!-- <li><a href="#/help">Help</a></li> -->
+                         <li><a href="#/">Home</a></li>
+                         <li><a href="#/logout">Logout</a></li>
+                    </ul>
+               </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+     </nav>
+
+
+
+
+     <ng-view></ng-view>
+
+</body>
 </html>

@@ -3,5 +3,22 @@ a[ng-click]{
 }
 
 body {
-     /*background-color: blue;*/
+     background-color: #99b3ff;
+}
+
+h1 {
+     background-color: #fff;
+     color: #444;
+     font-family: Abel;
+     font-feature-settings: "'liga' 1";
+     font-kerning: auto;
+     font-style: normal;
+     font-size: 3em;
+     font-weight: 400;
+     letter-spacing: 0;
+     line-height: 1.5em;
+     text-align: center;
+     text-decoration: none;
+     text-transform: none;
+     word-spacing: 0;
 }

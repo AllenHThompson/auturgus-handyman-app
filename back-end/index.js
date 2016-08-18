@@ -114,6 +114,7 @@ app.post('/postOrder', function(request, response) {
      var job = request.body.job;
      var userInfo = request.body.userInfo;
 
+     console.log('userInfo:', userInfo);
      console.log("post order");
      console.log("request: ", request.body);
 
