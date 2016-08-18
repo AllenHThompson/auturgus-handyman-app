@@ -120,11 +120,12 @@ app.post('/postOrder', function(request, response) {
 
 
      Jobs.create(job)
-     .then(function(){
-          return user.update(
-               { _id: job.userId },
-               { $set: userInfo });
-     })
+     // .then(function(){
+     //      return User.update(
+     //           { _id: job.userId }
+     //           // { $set: userInfo }
+     //      );
+     // })
      .then(function(result){
           response.json({
                status: "ok",

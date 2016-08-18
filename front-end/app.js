@@ -8,14 +8,10 @@ app.config(function($routeProvider){
           controller: 'mainController'
      })
 
-
-
      .when('/login', {
           templateUrl: 'login.html',
           controller: 'loginController'
      })
-
-
 
      .when('/services', {
           templateUrl: 'services.html',
@@ -61,7 +57,7 @@ app.config(function($routeProvider){
           templateUrl: 'thankyou.html',
           controller: 'thankyouController'
      })
-     
+
      .when('/logout', {
           templateUrl: 'home.html',
           controller: 'logoutController'
@@ -247,6 +243,7 @@ app.controller('quoteController', function($scope, $http, $location, serviceOpti
           // console.log(tvOptions)
 
      };
+
      $scope.cancel = function() {
           $location.path('/');
      };
@@ -424,16 +421,6 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
 
      $scope.pay = function() {
 
-          $scope.options
-
-          $scope.options.paidInFull = 'true'
-
-          // $http.post(API + '/postOrder', $scope.options).success(function(data) {
-          //
-          //      console.log("made api call")
-          //      // $cookies.put('Token', data.token);
-          //      // $location.path('/services');
-          // });
           var userInfo = {
                "name": $scope.name,
                "address": $scope.address,
@@ -444,83 +431,86 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
           };
           var options = serviceOptions.getOptions();
 
-          $http.post(API + '/postOrder', {
-               job: options,
-               userInfo: userInfo
-          }).success(function(data) {
+          var amount = options.total /*($cookies.get('quantity') * 20 * 100);*/
+          var handler = StripeCheckout.configure({
+               key: 'pk_test_Wz4GRV8wyrGtQq9kkVWRar6d',
+               locale: 'auto',
+               token: function(token) {
+                    var tokenId = token.id;
 
-               console.log(userInfo)
-               // $cookies.put('Token', data.token);
-               // $location.path('/services');
+                    return $http.post(API + '/postOrder', {
+                         job: options,
+                         token: tokenId,
+                         userInfo: userInfo,
+                         total: options.total
+
+                    }).success(function(data) {
+
+                         console.log(userInfo)
+                         // $cookies.put('Token', data.token);
+                         // $location.path('/services');
+                    }).then(function(data) {
+
+                         alert('Thank you, your card has been charged: $' + (options.total) + '!');
+
+                         $location.path('/thankyou');
+                    });
+               }
           });
-
-
-          // options.service
-          // options.time
-          // options.date
-          // options.description
-          // options.total
-          // $scope.name
-          // $scope.address
-          // $scope.address2
-          // $scope.city
-          // $scope.state
-          // $scope.zip
-
-          // var amount = order.total * 100;
-
-          // var handler = StripeCheckout.configure({
-          //      key: 'pk_test_etAw7vNMpUggsCRpMvZTY8Gw',
-          //      locale: 'auto',
-          //      token: function(token) {
-          //           var tokenId = token.id;
-          //           return $http({
-          //                url: API + '/payment',
-          //                method: 'POST',
-          //                data: {
-          //                     amount: 100,
-          //                     token: tokenId
-          //                }
-          //           })
-          //           console.log("hello")
-          //           .success(function(data) {
-          //
-          //                // console.log('Charge: ', data);
-          //                // $http.post(API + 'orders', {
-          //                //      token: $cookies.get('Token'),
-          //                //      order: order
-          //                // });
-          //                console.log("hello");
-          //                console.log('Charge: ', data);
-          //
-          //                $http.post(API + 'orders', {
-          //                     token: $cookies.get('Token'),
-          //                     jobs: jobs
-          //                });
-          //
-          //                $location.path('/thankyou');
-          //
-          //           })
-          //           .catch(function(err) {
-          //                console.log(err);
-          //
-          //           });
-          //      }
-          // });
-          // handler.open({
-          //      name: 'Auturgus Handyman App',
-          //      description: '2 widgets',
-          //      amount: 2000
-          // });
-          // handler.open({
-          //      name: 'Auturgus Handyman App',
-          //      description: 'Test Card #: 4242 4242 4242 4242',
-          //      // amount: amount
-          //      amount: 100
-          //
-          // });
-          $location.path('/thankyou'); //put this inside the callback function
+          handler.open({
+               name: 'Auturgus: Handyman App',
+               description: 'Test card #: 4242 4242 4242 4242 fsfdsfsd',
+               amount: amount * 100
+          });
      };
+     // $scope.pay = function() {
+     //
+     //      $scope.options
+     //
+     //      $scope.options.paidInFull = 'true'
+     //
+     //      // $http.post(API + '/postOrder', $scope.options).success(function(data) {
+     //      //
+     //      //      console.log("made api call")
+     //      //      // $cookies.put('Token', data.token);
+     //      //      // $location.path('/services');
+     //      // });
+     //      var userInfo = {
+     //           "name": $scope.name,
+     //           "address": $scope.address,
+     //           "address2": $scope.address2,
+     //           "city": $scope.city,
+     //           "state": $scope.state,
+     //           "zip": $scope.zip
+     //      };
+     //      var options = serviceOptions.getOptions();
+     //
+     //      $http.post(API + '/postOrder', {
+     //           job: options,
+     //           userInfo: userInfo
+     //      }).success(function(data) {
+     //
+     //           console.log(userInfo)
+     //           // $cookies.put('Token', data.token);
+     //           // $location.path('/services');
+     //      });
+     //
+     //
+     //      // options.service
+     //      // options.time
+     //      // options.date
+     //      // options.description
+     //      // options.total
+     //      // $scope.name
+     //      // $scope.address
+     //      // $scope.address2
+     //      // $scope.city
+     //      // $scope.state
+     //      // $scope.zip
+     //
+     //
+     //      $location.path('/thankyou'); //put this inside the callback function
+     // };
      $scope.cancel = function() {
           $location.path('/');
      };
