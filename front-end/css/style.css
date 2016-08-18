@@ -7,8 +7,9 @@ body {
 }
 
 h1 {
-     background-color: #fff;
-     color: #444;
+     background-color: #303030;
+     /*background-color: #fff;*/
+     color: #ffffff;
      font-family: Abel;
      font-feature-settings: "'liga' 1";
      font-kerning: auto;
@@ -21,4 +22,30 @@ h1 {
      text-decoration: none;
      text-transform: none;
      word-spacing: 0;
+}
+
+h2 {
+     background-color: #303030;
+     color: #ffffff;
+     font-family: Abel;
+     font-feature-settings: "'liga' 1";
+     font-kerning: auto;
+     font-style: normal;
+     font-size: 3em;
+     font-weight: 400;
+     letter-spacing: 0;
+     line-height: 1.5em;
+     text-align: center;
+     text-decoration: none;
+     text-transform: none;
+     word-spacing: 0;
+}
+
+.form-control {
+     background-color: #303030;
+     color: #ffffff;
+}
+
+.button {
+     background-color: #ffffff;
 }
