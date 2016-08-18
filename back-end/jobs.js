@@ -7,7 +7,7 @@ var jobs = mongoose.model('jobs', {
      requesterId:   { type: String},
      timeStamp:     { type: Date},
 
-	requesterId: {type: String}, //added this Tuesday to link order to requester
+	userId: {type: String}, //added this Tuesday to link order to requester
      service:{type: String}, //added this Wednesday to display on myjobs.html
 	wall:{ type: String },
 	brackets:{ type: Boolean },

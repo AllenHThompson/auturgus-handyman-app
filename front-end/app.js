@@ -61,28 +61,12 @@ app.config(function($routeProvider){
           templateUrl: 'thankyou.html',
           controller: 'thankyouController'
      })
+     
      .when('/logout', {
           templateUrl: 'home.html',
           controller: 'logoutController'
      });
 });
-
-// var order = {
-//   options: {
-//     "grind": null,
-//     "quantity": null
-//   },
-//   address: {
-//     "name": null,
-//     "address": null,
-//     "address2": null,
-//     "city": null,
-//     "state": null,
-//     "zipCode": null,
-//     "deliveryDate": null
-//   },
-//   total: null
-// };
 
 var jobs = {
      // status: {type: Boolean, required: true},
@@ -112,33 +96,6 @@ var jobs = {
      "userName": {type: String, required: true}
 };
 
-// {
-// 	"status": false,
-// 	"orders": [{
-// 		"wall": null,
-// 		"brackets": null,
-// 		"gt32": true,
-// 		"numHoles": 1,
-// 		"sizeHole": "orange",
-// 		"typeWall": "plaster",
-// 		"numFans": 2,
-// 		"installType": null,
-// 		"haveFan": null,
-// 		"needLadder": false,
-// 		"numHours": 2,
-// 		"date": null,
-// 		"time": null,
-// 		"total": 100,
-// 		"description": "need tv on ceiling"
-// 	}],
-// 	"total": 100,
-// 	"description": "need tv on ceiling",
-// 	"providerId": null,
-// 	"providerName": null,
-// 	"requesterId": 2,
-// 	"requesterName": "Will"
-// }
-
 app.factory('serviceOptions', function($http) {
      var serviceOptions = {};
      serviceOptions.getOptions = function(){
@@ -152,7 +109,7 @@ app.factory('serviceOptions', function($http) {
      };
      serviceOptions.postOrder = function(callback){
           console.log("running");
-          if (!this.options || this.options == undefined){
+          if (!this.options || this.options === undefined){
                console.error("Options are not set");
                return;
           }
@@ -172,8 +129,6 @@ app.factory('serviceOptions', function($http) {
      return serviceOptions;
 });
 
-
-
 app.controller('mainController', function(){
 
 });
@@ -184,10 +139,6 @@ app.controller('thankyouController', function(){
 
 app.controller('logoutController', function($cookies){
 
-     // console.log("YOU ARE TRYING TO LOGOUT")
-     //
-     // console.log("delelte these: ",$cookies.getAll())
-
      for(var cookie in $cookies.getAll()) {
           if($cookies.getAll().hasOwnProperty(cookie)) {
                $cookies.remove(cookie);
@@ -196,10 +147,7 @@ app.controller('logoutController', function($cookies){
      }
      // console.log("delelte these: ",$cookies.getAll())
 
-
-
 });
-
 
 //I WANT THIS CONTROLLER TO GET JOB INFO FOR REQUESTERS AND DISPLAY ON 'MYJOBS.HTML'
 

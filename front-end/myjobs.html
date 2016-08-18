@@ -2,7 +2,6 @@
      <thead>
           <tr>
                <th>Service</th>
-
                <th>Date</th>
                <th>Description</th>
                <th>Total</th>
@@ -13,7 +12,6 @@
 <tbody>
      <tr ng-repeat="job in jobs">
           <td><span ng-show="job.service">{{job.service}}</span></td>
-
           <td><span ng-show="job.timeStamp">{{job.timeStamp | date:'medium'}}</span></td>
           <td><span ng-show="job.description">{{job.description}}</span></td>
           <td><span ng-show="job.total">{{job.total | currency}}</span></td>
