@@ -32,7 +32,10 @@ This app is an Uber for handymen. There are two parties involved; the 'requester
 
 ### Prerequisities
 #### NPMs to install
-```npm modules to install
+
+npm modules to install
+```
+
 var express = require('express');
 var app = express();
 var Requester = require('./requester');
@@ -43,12 +46,6 @@ var bodyParser = require('body-parser');
 var bcrypt = require('my-bcrypt');
 var randomtoken = require('rand-token');
 var cors = require('cors');
-```
-
-## Deployment
-Add additional notes about how to deploy this on a live system
-
-```
 
 ```
 
