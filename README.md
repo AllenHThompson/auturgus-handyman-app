@@ -61,7 +61,7 @@ var cors = require('cors');
 ##WISH LIST
 + Need to handle the provider side to so they can pick and choose the jobs.
 + Add a 'paid' flag to the jobs table in case a credit card was charged back.
-+ Create a more fluid scheduling system so providers and work out their schedule.
++ Create a more fluid scheduling system so providers can work out their schedule.
 + Allow requester to have bidding for their jobs.
 + 'Pay it now' pricing for job quotes.
 + Display message to user when a user name is already taken.
