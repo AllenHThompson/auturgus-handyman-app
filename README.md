@@ -16,18 +16,19 @@ This app is an Uber for handymen. There are two parties involved; the 'requester
 * Express
 * Node.js
 
+
 ## Demo
 [Live Demo](http://auturgus-handyman-app.surge.sh/)
 
 ## Screenshots
 ###Home page:
-![alt text](/Users/mac/github-projects/auturgus-handyman-app/auturgus-home-screen.png)
+![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-home-page.png)
 ###Login page:
-![alt text](/Users/mac/github-projects/auturgus-handyman-app/auturgus-login-screen.png)
+![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-login-screen.png)
 ###Register page:
-![alt text](/Users/mac/github-projects/auturgus-handyman-app/auturgus-register-screen.png)
+![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-register-page.png)
 ###Jobs page:
-![alt text](/Users/mac/github-projects/auturgus-handyman-app/auturgus-jobs-screen.png)
+![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-jobs-screen.png)
 
 ### Prerequisities
 #### NPMs to install
