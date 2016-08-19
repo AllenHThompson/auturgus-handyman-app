@@ -9,11 +9,12 @@ var bodyParser = require('body-parser');
 var bcrypt = require('my-bcrypt');
 var randomtoken = require('rand-token');
 var cors = require('cors');
+var config = require('./config.json');
 
 mongoose.set('debug', true);
 
-var API_STRIPE_TEST_SECRET_KEY = "sk_test_tTmnADuLXcyI0U2xIpdghVzw";
-var API_STRIPE_TEST_PUBLISH_KEY = "pk_test_etAw7vNMpUggsCRpMvZTY8Gw";
+var API_STRIPE_TEST_SECRET_KEY = config.stripeSecret;
+var API_STRIPE_TEST_PUBLISH_KEY = config.stripePublic;
 
 var stripe = require("stripe")(
   API_STRIPE_TEST_SECRET_KEY
@@ -21,8 +22,8 @@ var stripe = require("stripe")(
 
 
 /* MongoDB Setup */
-var creds = require('./mongo_creds.json');
-mongoose.connect('mongodb://' + creds.username + ':' + creds.password + '@ds025782.mlab.com:25782/auturgus-handyman-app');
+
+mongoose.connect(config.mongoUrl);
 
 
 /* bcrypt Setup */
