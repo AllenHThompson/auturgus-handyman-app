@@ -212,6 +212,10 @@ app.post('/login', function(request, response) {
           User.findOne({_id: credentials._id }, function(error, findResponse){
                console.log("id: ", credentials._id)
                if(error){
+                    response.json({
+                         "status": "fail",
+                         "message": "no record in database"
+                    });
                     console.log('an error occured while reading data for user [' + credentials._id + '] from the database]');
                     console.error(error.message);
                     return;
@@ -224,7 +228,8 @@ app.post('/login', function(request, response) {
                /*ADD A BUNCH OF USER INFORMATION*/
                /* HOW TO STYLE THIS THING*/
 
-               if (findResponse.encryptedPassword === null){
+               if (findResponse === null){
+                    // console.log
                     response.json({
                          "status": "fail",
                          "message": "please register"

@@ -141,7 +141,7 @@ app.controller('logoutController', function($cookies){
 
           }
      }
-     // console.log("delelte these: ",$cookies.getAll())
+
 
 });
 
@@ -186,6 +186,7 @@ app.controller('loginController', function($scope, $http, $location, $cookies) {
           console.log("login controller creds: ", credentials);
           $http.post(API + '/login', credentials)
                .success(function(data) {
+                    console.log(data)
                     $cookies.put('Token', data.token);
                     $cookies.put('userId', credentials._id);
                     $cookies.put('userName', data.name);
@@ -459,7 +460,7 @@ app.controller('paymentController', function($rootScope, $scope, $http, $locatio
           });
           handler.open({
                name: 'Auturgus: Handyman App',
-               description: 'Test card #: 4242 4242 4242 4242 fsfdsfsd',
+               description: 'Test card #: 4242 4242 4242 4242',
                amount: amount * 100
           });
      };
@@ -546,7 +547,7 @@ app.run(function($rootScope, $location, $cookies) {
                     $location.path('/login');
                }
           }
-          if (token !== undefined) {
+          if (token !== undefined || null) {
                if (type === "provider") {
 
                     if (nextUrl[1] === '/services') {
@@ -557,7 +558,8 @@ app.run(function($rootScope, $location, $cookies) {
                          $location.path('/home');
                     }
                }
-               $location.path(nextUrl[1]);
+               // $location.path(nextUrl[1]);
+               $location.path('/home');
           }
 
           $cookies.put('nextUrl', nextUrl[1]);
