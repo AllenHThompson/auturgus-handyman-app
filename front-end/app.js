@@ -558,8 +558,8 @@ app.run(function($rootScope, $location, $cookies) {
                          $location.path('/home');
                     }
                }
-               // $location.path(nextUrl[1]);
-               $location.path('/home');
+               $location.path(nextUrl[1]);
+               // $location.path('/home');
           }
 
           $cookies.put('nextUrl', nextUrl[1]);
