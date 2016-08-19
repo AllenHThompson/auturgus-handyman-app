@@ -17,7 +17,7 @@ This app is an Uber for handymen. There are two parties involved; the 'requester
 * Node.js
 
 ## Demo
-[Live Demo](http://surge.auturgus-handyman-app.sh)
+[Live Demo](http://auturgus-handyman-app.surge.sh/)
 
 ## Screenshots
 ###Home page:
