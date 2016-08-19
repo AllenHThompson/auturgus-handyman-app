@@ -26,7 +26,7 @@ This app is an Uber for handymen. There are two parties involved; the 'requester
 ###Login page:
 ![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-login-screen.png)
 ###Register page:
-![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-register-page.png)
+![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-register-screen.png)
 ###Jobs page:
 ![alt text](https://github.com/AllenHThompson/auturgus-handyman-app/blob/master/auturgus-jobs-screen.png)
 
