@@ -3,7 +3,7 @@
 #### A web application using HTML, CSS, JavaScript, AngularJS on the front-end and Node.js, Express, MongoDB, and Mongoose on the back-end. Stripe was used for payments
 
 ## Summary
-This app is an Uber for handymen. There are two parties involved; the 'requester' - those looking to have a task completed, the 'provider' - service professionals looking to get paid to complete a task. A requester will choose from a list of very specific jobs/tasks/projects. The requester enter details about the project and receive  a quote. The requester will be prompted to pay for their service. The requester can also log in and view all the service they have scheduled. The requester can also logout and all cookies will be deleted. Right now, only the requester side is complete. Future functionality will allow the "jobs" to be sent to a queue were the providers/service professionals can select the jobs.
+This app is an Uber for handymen. There are two parties involved; the 'requester' - those looking to have a task completed, the 'provider' - service professionals looking to get paid to complete a task. A requester will choose from a list of very specific jobs/tasks/projects. This app is dependent on jobs with a narrow scope. Bigger jobs with larger scopes will have to be quoted onsite by a provider (service professional). The requester enter details about the project and receive  a quote. The requester will be prompted to pay for their service. The requester can also log in and view all the service they have scheduled. The requester can also logout and all cookies will be deleted. Right now, only the requester side is complete. Future functionality will allow the "jobs" to be sent to a queue were the providers/service professionals can select the jobs.
 
 ## Technologies, frameworks, & programming languages used
 * HTML5 & CSS3
@@ -57,12 +57,7 @@ Add additional notes about how to deploy this on a live system
 
 * **Allen H. Thompson** - (https://github.com/allenhthompson)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
 ## Acknowledgments
-
 * Need to thank Toby Ho and Will Wyatt for helping me along the way!
 
 ##WISH LIST
@@ -73,3 +68,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 + 'Pay it now' pricing for job quotes.
 + Display message to user when a user name is already taken.
 + Display a message to the user when a password doesn't match.
++ Have to have a rating for requesters and providers.
