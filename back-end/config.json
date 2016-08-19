@@ -1,0 +1,5 @@
+{
+     "mongoUrl": "mongodb://test:test@ds025782.mlab.com:25782/auturgus-handyman-app",
+     "stripeSecret": "sk_test_tTmnADuLXcyI0U2xIpdghVzw",
+     "stripePublic": "pk_test_etAw7vNMpUggsCRpMvZTY8Gw"
+}

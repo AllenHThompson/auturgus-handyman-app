@@ -169,7 +169,7 @@ app.controller('myJobsController', function($scope, $http, $location, $routePara
 
 
 
-var API = 'http://localhost:8000';
+var API = 'https://auturgushandymanapp-lvszrwntpi.now.sh';
 
 app.controller('loginController', function($scope, $http, $location, $cookies) {
      console.log("login.controller");
