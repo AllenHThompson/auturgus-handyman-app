@@ -93,37 +93,73 @@ var jobs = {
 };
 
 app.factory('serviceOptions', function($http) {
-     var serviceOptions = {};
-     serviceOptions.getOptions = function(){
-          return this.options;
-     };
-     serviceOptions.setOptions = function(serviceOptions){
-          this.options = serviceOptions;
-     };
-     serviceOptions.setOptionsId = function(orderID){
-          this.options._id = orderID;
-     };
-     serviceOptions.postOrder = function(callback){
-          console.log("running");
-          if (!this.options || this.options === undefined){
-               console.error("Options are not set");
-               return;
+     console.log('serviceOptions');
+     return {
+          getOptions:    function(){
+                              return this.options;
+                         },
+          setOptions:    function(serviceOptions){
+                              this.options = serviceOptions;
+                         },
+          setOptionsId:  function(orderID){
+                              this.options._id = orderID;
+                         },
+          postOrder:     function(callback){
+               console.log("running");
+               if (!this.options || this.options === undefined){
+                    console.error("Options are not set");
+                    return;
+               }
+
+               $http.post(API + '/postOrder', this.options)
+
+               .then(function(data) {
+                    console.log("options: ", this.options);
+                    console.log("result", data);
+                    callback(data);
+
+               })
+               .catch(function(err){
+                    console.log("err ", err);
+                    callback(err);
+               });
           }
-
-          $http.post(API + '/postOrder', this.options)
-          .then(function(data) {
-               console.log("options: ", this.options);
-               console.log("result", data);
-               callback(data);
-
-          })
-          .catch(function(err){
-               console.log("err ", err);
-               callback(err);
-          });
-     };
-     return serviceOptions;
+     }
 });
+//****10/5/16rearranged 'serviceOptions' factory to return an object
+// app.factory('serviceOptions', function($http) {
+//      var serviceOptions = {};
+//      serviceOptions.getOptions = function(){
+//           return this.options;
+//      };
+//      serviceOptions.setOptions = function(serviceOptions){
+//           this.options = serviceOptions;
+//      };
+//      serviceOptions.setOptionsId = function(orderID){
+//           this.options._id = orderID;
+//      };
+//      serviceOptions.postOrder = function(callback){
+//           console.log("running");
+//           if (!this.options || this.options === undefined){
+//                console.error("Options are not set");
+//                return;
+//           }
+//
+//           $http.post(API + '/postOrder', this.options)
+//
+//           .then(function(data) {
+//                console.log("options: ", this.options);
+//                console.log("result", data);
+//                callback(data);
+//
+//           })
+//           .catch(function(err){
+//                console.log("err ", err);
+//                callback(err);
+//           });
+//      };
+//      return serviceOptions;
+// });
 
 app.controller('mainController', function(){
 
